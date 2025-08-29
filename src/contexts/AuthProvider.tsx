@@ -1,25 +1,18 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useState,
-  type ReactNode,
-} from "react";
-
+import { createContext, useContext, useEffect, useLayoutEffect, useState, type ReactNode } from "react";
 import type { InternalAxiosRequestConfig } from "axios";
 import { apiClient } from "@/api/clients";
-import { getCurrentUser, refreshToken, registerUser } from "@/api/auth";
+import { getCurrentUser, login, refreshToken, register } from "@/api/auth";
 import CircularProgress from "@mui/material/CircularProgress";
-import {
-  useMutation,
-  useQuery,
-  type UseMutationResult,
-} from "@tanstack/react-query";
+import { useMutation, useQuery, type UseMutationResult } from "@tanstack/react-query";
+import Box from "@mui/material/Box";
 
-type AuthContextType = {
+export type AuthContextType = {
   user: User | undefined;
+  token: string | null;
   registerMutation: UseMutationResult<string, Error, RegisterPayload, unknown>;
+  loginMutation: UseMutationResult<string, Error, LoginPayload, unknown>;
+  isUserLoading: boolean;
+  checkedAuth: boolean;
 };
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
@@ -44,7 +37,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     refresh();
   }, []);
 
-  const { data: user } = useQuery({
+  const { data: user, isLoading: isUserLoading } = useQuery({
     queryKey: ["me", token],
     queryFn: getCurrentUser,
     enabled: !!token,
@@ -52,7 +45,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   });
 
   const registerMutation = useMutation({
-    mutationFn: (payload: RegisterPayload) => registerUser(payload),
+    mutationFn: (payload: RegisterPayload) => register(payload),
+    onSuccess: (data) => {
+      setToken(data);
+    },
+  });
+
+  const loginMutation = useMutation({
+    mutationFn: (payload: LoginPayload) => login(payload),
     onSuccess: (data) => {
       setToken(data);
     },
@@ -61,8 +61,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useLayoutEffect(() => {
     const authInterceptor = apiClient.interceptors.request.use(
       (config: CustomAxiosRequestConfig): InternalAxiosRequestConfig => {
-        if (!config._retry && token)
-          config.headers.Authorization = `Bearer ${token}`;
+        if (!config._retry && token) config.headers.Authorization = `Bearer ${token}`;
 
         return config;
       }
@@ -95,11 +94,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   if (!checkedAuth) {
-    return <CircularProgress />;
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "50vh" }}>
+        <CircularProgress />
+      </Box>
+    );
   }
 
   return (
-    <AuthContext.Provider value={{ user, registerMutation }}>
+    <AuthContext.Provider value={{ user, registerMutation, loginMutation, token, isUserLoading, checkedAuth }}>
       {children}
     </AuthContext.Provider>
   );

@@ -11,6 +11,7 @@ import reportWebVitals from "./reportWebVitals.ts";
 import { ThemeProvider } from "@emotion/react";
 import theme from "./theme.ts";
 import CssBaseline from "@mui/material/CssBaseline";
+import { AuthProvider, useAuth } from "./contexts/AuthProvider.tsx";
 
 // Create a new router instance
 
@@ -19,6 +20,7 @@ const router = createRouter({
   routeTree,
   context: {
     ...TanStackQueryProviderContext,
+    auth: undefined!,
   },
   defaultPreload: "intent",
   scrollRestoration: true,
@@ -33,6 +35,19 @@ declare module "@tanstack/react-router" {
   }
 }
 
+function AppWithRouter() {
+  const auth = useAuth();
+  return (
+    <RouterProvider
+      router={router}
+      context={{
+        ...TanStackQueryProviderContext,
+        auth,
+      }}
+    />
+  );
+}
+
 // Render the app
 const rootElement = document.getElementById("app");
 if (rootElement && !rootElement.innerHTML) {
@@ -41,7 +56,9 @@ if (rootElement && !rootElement.innerHTML) {
     <TanStackQueryProvider.Provider {...TanStackQueryProviderContext}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <RouterProvider router={router} />
+        <AuthProvider>
+          <AppWithRouter />
+        </AuthProvider>
       </ThemeProvider>
     </TanStackQueryProvider.Provider>
   );

@@ -5,6 +5,11 @@ type User = {
   isVerified: boolean;
 };
 
+type LoginPayload = {
+  email: string;
+  password: string;
+};
+
 type RegisterPayload = {
   email: string;
   displayName: string;
