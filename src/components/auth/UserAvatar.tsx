@@ -6,13 +6,12 @@ type UserAvatarProps = {
   size?: number;
 };
 
-function stringToColor(str: string): string {
+function stringToHue(str: string): number {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
     hash = str.charCodeAt(i) + ((hash << 5) - hash);
   }
-  const hue = Math.abs(hash) % 360;
-  return `hsl(${hue}, 60%, 60%)`;
+  return Math.abs(hash) % 360;
 }
 
 function stringToInitials(name: string): string {
@@ -22,14 +21,27 @@ function stringToInitials(name: string): string {
 }
 
 export default function UserAvatar({ id, displayName, size = 56 }: UserAvatarProps) {
+  const hue = stringToHue(id);
+  const color1 = `hsl(${hue}, 70%, 40%)`;
+  const color2 = `hsl(${(hue + 40) % 360}, 70%, 50%)`;
+
   return (
     <Avatar
       sx={{
-        bgcolor: stringToColor(id),
+        background: `linear-gradient(135deg, ${color1}, ${color2})`,
         width: size,
         height: size,
         fontSize: size / 2.5,
-        fontWeight: 600,
+        fontWeight: 700,
+        color: "rgba(255,255,255,0.9)",
+        position: "relative",
+        "&::after": {
+          content: '""',
+          position: "absolute",
+          inset: 0,
+          borderRadius: "50%",
+          background: "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.25), transparent 50%)",
+        },
       }}
     >
       {stringToInitials(displayName)}
