@@ -7,9 +7,10 @@ import PasswordField from "./PasswordInput";
 
 type LoginFormProps = {
   onSubmit: (data: LoginFormData) => void;
+  isPending: boolean;
 };
 
-export default function LoginForm({ onSubmit }: LoginFormProps) {
+export default function LoginForm({ onSubmit, isPending }: LoginFormProps) {
   const {
     handleSubmit,
     control,
@@ -50,7 +51,7 @@ export default function LoginForm({ onSubmit }: LoginFormProps) {
         setShowPassword={setShowPassword}
       />
 
-      <Button type="submit" fullWidth variant="contained" sx={{ mt: 2, py: 1.2 }}>
+      <Button type="submit" fullWidth variant="contained" disabled={isPending} sx={{ mt: 2, py: 1.2 }}>
         Login
       </Button>
     </Box>

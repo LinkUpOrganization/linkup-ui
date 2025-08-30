@@ -2,30 +2,36 @@ import { Box, Card, CardContent, Divider, Typography, Alert } from "@mui/materia
 import GoogleAuthButton from "@/components/auth/GoogleAuthButton";
 import RegisterForm from "@/components/auth/RegisterForm";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import type { RegisterFormData } from "@/schemas/authSchemas";
 import { useAuth } from "@/contexts/AuthProvider";
-import { useState } from "react";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import AuthPrompt from "@/components/auth/AuthPrompt";
+import { useMutation } from "@tanstack/react-query";
+import { register } from "@/api/auth";
 
 export const Route = createFileRoute("/register")({
   component: RegisterPage,
 });
 
 function RegisterPage() {
-  const { registerMutation } = useAuth();
-  const [error, setError] = useState("");
+  const { setToken } = useAuth();
+
   const navigate = useNavigate();
 
-  const handleRegister = async (data: RegisterFormData) => {
-    try {
-      setError("");
-      await registerMutation.mutateAsync(data);
+  const {
+    mutate: handleRegister,
+    isError,
+    isPending,
+    error,
+  } = useMutation({
+    mutationFn: (payload: RegisterPayload) => register(payload),
+    onSuccess: (data) => {
+      setToken(data);
       navigate({ to: "/verify-email" });
-    } catch (error: any) {
-      setError(error.response.data ?? "Failed to create an account");
-    }
-  };
+    },
+    onError: (error: any) => {
+      console.log(error);
+    },
+  });
 
   return (
     <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" px={2}>
@@ -35,9 +41,9 @@ function RegisterPage() {
             Create Account
           </Typography>
 
-          {error && (
+          {isError && (
             <Alert icon={<ErrorOutlineIcon fontSize="inherit" />} severity="error">
-              {error}
+              {(error as any)?.response?.data ?? "Failed to create an account"}
             </Alert>
           )}
 
@@ -45,7 +51,7 @@ function RegisterPage() {
 
           <Divider sx={{ my: 2 }}>or</Divider>
 
-          <RegisterForm onSubmit={handleRegister} />
+          <RegisterForm onSubmit={handleRegister} isPending={isPending} />
 
           <AuthPrompt text="Already have an account?" linkText="Login" to="/login" />
         </CardContent>

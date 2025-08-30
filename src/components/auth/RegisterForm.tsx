@@ -7,9 +7,10 @@ import PasswordField from "./PasswordInput";
 
 type RegisterFormProps = {
   onSubmit: (data: RegisterFormData) => void;
+  isPending: boolean;
 };
 
-export default function RegisterForm({ onSubmit }: RegisterFormProps) {
+export default function RegisterForm({ onSubmit, isPending }: RegisterFormProps) {
   const {
     handleSubmit,
     control,
@@ -76,12 +77,7 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
         setShowPassword={setShowPassword}
       />
 
-      <Button
-        type="submit"
-        fullWidth
-        variant="contained"
-        sx={{ mt: 2, py: 1.2, borderRadius: 2 }}
-      >
+      <Button type="submit" fullWidth variant="contained" disabled={isPending} sx={{ mt: 2, py: 1.2, borderRadius: 2 }}>
         Register
       </Button>
     </Box>

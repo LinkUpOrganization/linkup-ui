@@ -2,10 +2,11 @@ import GoogleAuthButton from "@/components/auth/GoogleAuthButton";
 import { useAuth } from "@/contexts/AuthProvider";
 import { Box, Card, CardContent, Typography, Alert, Divider } from "@mui/material";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import LoginForm from "@/components/auth/LoginForm";
 import AuthPrompt from "@/components/auth/AuthPrompt";
+import { useMutation } from "@tanstack/react-query";
+import { login } from "@/api/auth";
 
 export const Route = createFileRoute("/login")({
   component: LoginPage,
@@ -13,18 +14,23 @@ export const Route = createFileRoute("/login")({
 
 function LoginPage() {
   const navigate = useNavigate();
-  const { loginMutation } = useAuth();
-  const [error, setError] = useState("");
+  const { setToken } = useAuth();
 
-  const handleLogin = async (data: LoginPayload) => {
-    try {
-      setError("");
-      await loginMutation.mutateAsync(data);
+  const {
+    mutate: handleLogin,
+    isError,
+    isPending,
+    error,
+  } = useMutation({
+    mutationFn: (payload: LoginPayload) => login(payload),
+    onSuccess: (data) => {
+      setToken(data);
       navigate({ to: "/profile" });
-    } catch (error: any) {
-      setError(error.response.data ?? "Failed to create an account");
-    }
-  };
+    },
+    onError: (error: any) => {
+      console.log(error);
+    },
+  });
 
   return (
     <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" px={2}>
@@ -34,9 +40,9 @@ function LoginPage() {
             Login
           </Typography>
 
-          {error && (
+          {isError && (
             <Alert icon={<ErrorOutlineIcon fontSize="inherit" />} severity="error">
-              {error}
+              {(error as any)?.response?.data ?? "Failed to login"}
             </Alert>
           )}
 
@@ -44,7 +50,7 @@ function LoginPage() {
 
           <Divider sx={{ my: 2 }}>or</Divider>
 
-          <LoginForm onSubmit={handleLogin} />
+          <LoginForm onSubmit={handleLogin} isPending={isPending} />
 
           <AuthPrompt text="Don't have an account?" linkText="Register" to="/register" />
         </CardContent>

@@ -1,18 +1,17 @@
 import { createContext, useContext, useEffect, useLayoutEffect, useState, type ReactNode } from "react";
 import type { InternalAxiosRequestConfig } from "axios";
 import { apiClient } from "@/api/clients";
-import { getCurrentUser, login, refreshToken, register } from "@/api/auth";
+import { getCurrentUser, refreshToken } from "@/api/auth";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useMutation, useQuery, type UseMutationResult } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import Box from "@mui/material/Box";
 
 export type AuthContextType = {
   user: User | undefined;
   token: string | null;
-  registerMutation: UseMutationResult<string, Error, RegisterPayload, unknown>;
-  loginMutation: UseMutationResult<string, Error, LoginPayload, unknown>;
   isUserLoading: boolean;
   checkedAuth: boolean;
+  setToken: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
@@ -42,20 +41,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     queryFn: getCurrentUser,
     enabled: !!token,
     retry: false,
-  });
-
-  const registerMutation = useMutation({
-    mutationFn: (payload: RegisterPayload) => register(payload),
-    onSuccess: (data) => {
-      setToken(data);
-    },
-  });
-
-  const loginMutation = useMutation({
-    mutationFn: (payload: LoginPayload) => login(payload),
-    onSuccess: (data) => {
-      setToken(data);
-    },
   });
 
   useLayoutEffect(() => {
@@ -102,7 +87,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, registerMutation, loginMutation, token, isUserLoading, checkedAuth }}>
+    <AuthContext.Provider value={{ user, setToken, token, isUserLoading, checkedAuth }}>
       {children}
     </AuthContext.Provider>
   );

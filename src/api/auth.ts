@@ -15,32 +15,12 @@ export const refreshToken = async (): Promise<ApiResponse<string>> => {
   }
 };
 
-export const resendVerification = async (): Promise<ApiResponse<void>> => {
-  try {
-    await apiClient.post("/auth/resend-verification");
-    return {
-      success: true,
-    };
-  } catch (error: any) {
-    return {
-      success: false,
-      message: error.response.data,
-    };
-  }
+export const resendVerification = async (): Promise<void> => {
+  return await apiClient.post("/auth/resend-verification");
 };
 
-export const confirmEmail = async (token: string): Promise<ApiResponse<void>> => {
-  try {
-    await apiClient.post("/auth/confirm-email", { verificationToken: token });
-    return {
-      success: true,
-    };
-  } catch (error: any) {
-    return {
-      success: false,
-      message: error.response.data,
-    };
-  }
+export const confirmEmail = async (verificationToken: string): Promise<void> => {
+  return await apiClient.post("/auth/confirm-email", { verificationToken });
 };
 
 export const verificationCooldown = async (): Promise<ApiResponse<number>> => {
