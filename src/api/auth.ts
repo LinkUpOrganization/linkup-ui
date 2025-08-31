@@ -63,6 +63,11 @@ export async function login(data: LoginPayload): Promise<string> {
   return response.data;
 }
 
+export async function logout(): Promise<void> {
+  const response = await apiClient.post("/auth/logout");
+  return response.data;
+}
+
 export async function forgotPassword(email: string): Promise<void> {
   const response = await apiClient.post("/auth/forgot-password", { email });
   return response.data;

@@ -1,4 +1,4 @@
-import { confirmEmail } from "@/api/auth";
+import { confirmEmail, refreshToken } from "@/api/auth";
 import { Box, Card, CardContent, Typography, Alert } from "@mui/material";
 import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
 import CheckIcon from "@mui/icons-material/Check";
@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import Header from "@/components/auth/Header";
 import { extractApiErrorMessage } from "@/utils/extractErrorMessage";
+import { useAuth } from "@/contexts/AuthProvider";
 
 export const Route = createFileRoute("/confirm-email")({
   validateSearch: (search: Record<string, unknown>): { verificationToken?: string } => {
@@ -20,11 +21,18 @@ export const Route = createFileRoute("/confirm-email")({
 function ConfirmEmailPage() {
   const { verificationToken } = useSearch({ from: "/confirm-email" });
   const navigate = useNavigate();
+  const { token, setToken } = useAuth();
 
   const { mutate, isPending, isSuccess, isError, error } = useMutation({
     mutationFn: confirmEmail,
-    onSuccess: () => {
-      setTimeout(() => navigate({ to: "/login", replace: true }), 2000);
+    onSuccess: async () => {
+      if (token) {
+        const { success, data: accessToken } = await refreshToken();
+        if (success && accessToken) setToken(accessToken);
+        setTimeout(() => navigate({ to: "/profile", replace: true }), 2000);
+      } else {
+        setTimeout(() => navigate({ to: "/login", replace: true }), 2000);
+      }
     },
     onError: (error: any) => {
       console.log(error);
@@ -64,7 +72,9 @@ function ConfirmEmailPage() {
 
             {isSuccess && (
               <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
-                Your email is verified. You can login now!
+                {token
+                  ? "Your email is successfully verified!"
+                  : "Your email is successfully verified. You can login now!"}
               </Alert>
             )}
 

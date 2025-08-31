@@ -76,7 +76,6 @@ const theme = createTheme({
         root: {
           borderRadius: 12,
           textTransform: "none",
-          padding: "8px 16px",
           fontWeight: 500,
           boxShadow: "none",
           "&:hover": {
