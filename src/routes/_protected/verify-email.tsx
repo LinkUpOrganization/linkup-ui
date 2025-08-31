@@ -2,12 +2,15 @@ import { resendVerification } from "@/api/auth";
 import { ResendEmailButton } from "@/components/auth/ResendEmailButton";
 import { useResendTimer } from "@/hooks/useResendTimer";
 import { Alert, Box, Card, CardContent, Typography } from "@mui/material";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import CheckIcon from "@mui/icons-material/Check";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { useMutation } from "@tanstack/react-query";
 import Header from "@/components/auth/Header";
 import { extractApiErrorMessage } from "@/utils/extractErrorMessage";
+import { ROUTES } from "@/constants/routes";
+import { useEffect } from "react";
+import { useAuth } from "@/contexts/AuthProvider";
 
 export const Route = createFileRoute("/_protected/verify-email")({
   component: VerifyEmail,
@@ -15,6 +18,8 @@ export const Route = createFileRoute("/_protected/verify-email")({
 
 function VerifyEmail() {
   const { resendDisabled, resendTimer, startResendTimer } = useResendTimer();
+  const { isUserLoading, user } = useAuth();
+  const navigate = useNavigate();
 
   const handleResend = async () => {
     mutate();
@@ -29,6 +34,12 @@ function VerifyEmail() {
       console.log(error);
     },
   });
+
+  useEffect(() => {
+    if (!isUserLoading && user?.isVerified) {
+      navigate({ to: ROUTES.PROFILE, replace: true });
+    }
+  }, [isUserLoading, user, navigate]);
 
   return (
     <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", gap: 1 }}>
