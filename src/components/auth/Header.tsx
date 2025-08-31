@@ -44,6 +44,7 @@ export default function Header({ currentPage }: HeaderProps) {
           alignItems: "center",
           justifyContent: "center",
           p: 2,
+          userSelect: "none",
         }}
       >
         <Box component="img" src={internet} height="35px" mr={1} />
@@ -80,6 +81,7 @@ export default function Header({ currentPage }: HeaderProps) {
                 alignItems: "center",
                 textDecoration: "none",
                 color: "inherit",
+                userSelect: "none",
               }}
             >
               <Box component="img" src={internet} height="40px" mr={1} />
