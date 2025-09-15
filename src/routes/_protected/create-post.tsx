@@ -41,7 +41,7 @@ export default function CreatePostPage() {
   } = useMutation({
     mutationFn: createPost,
     onSuccess: () => {
-      navigate({ to: "/" });
+      // navigate({ to: "/" });
     },
     onError: (error: any) => {
       console.error("Failed to create post:", error);
