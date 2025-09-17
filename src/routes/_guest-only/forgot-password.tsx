@@ -11,7 +11,7 @@ import { Controller, useForm } from "react-hook-form";
 import AuthPrompt from "@/components/auth/AuthPrompt";
 import { extractApiErrorMessage } from "@/utils/extractErrorMessage";
 
-export const Route = createFileRoute("/_guest/forgot-password")({
+export const Route = createFileRoute("/_guest-only/forgot-password")({
   component: ForgotPassword,
 });
 

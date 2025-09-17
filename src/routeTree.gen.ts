@@ -17,9 +17,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProtectedVerifyEmailRouteImport } from './routes/_protected/verify-email'
 import { Route as ProtectedProfileRouteImport } from './routes/_protected/profile'
 import { Route as ProtectedCreatePostRouteImport } from './routes/_protected/create-post'
-import { Route as GuestRegisterRouteImport } from './routes/_guest/register'
-import { Route as GuestLoginRouteImport } from './routes/_guest/login'
-import { Route as GuestForgotPasswordRouteImport } from './routes/_guest/forgot-password'
+import { Route as GuestOnlyRegisterRouteImport } from './routes/_guest-only/register'
+import { Route as GuestOnlyLoginRouteImport } from './routes/_guest-only/login'
+import { Route as GuestOnlyForgotPasswordRouteImport } from './routes/_guest-only/forgot-password'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
@@ -59,29 +59,29 @@ const ProtectedCreatePostRoute = ProtectedCreatePostRouteImport.update({
   path: '/create-post',
   getParentRoute: () => ProtectedRoute,
 } as any)
-const GuestRegisterRoute = GuestRegisterRouteImport.update({
-  id: '/register',
+const GuestOnlyRegisterRoute = GuestOnlyRegisterRouteImport.update({
+  id: '/_guest-only/register',
   path: '/register',
-  getParentRoute: () => GuestRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-const GuestLoginRoute = GuestLoginRouteImport.update({
-  id: '/login',
+const GuestOnlyLoginRoute = GuestOnlyLoginRouteImport.update({
+  id: '/_guest-only/login',
   path: '/login',
-  getParentRoute: () => GuestRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-const GuestForgotPasswordRoute = GuestForgotPasswordRouteImport.update({
-  id: '/forgot-password',
+const GuestOnlyForgotPasswordRoute = GuestOnlyForgotPasswordRouteImport.update({
+  id: '/_guest-only/forgot-password',
   path: '/forgot-password',
-  getParentRoute: () => GuestRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/confirm-email': typeof ConfirmEmailRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/forgot-password': typeof GuestForgotPasswordRoute
-  '/login': typeof GuestLoginRoute
-  '/register': typeof GuestRegisterRoute
+  '/forgot-password': typeof GuestOnlyForgotPasswordRoute
+  '/login': typeof GuestOnlyLoginRoute
+  '/register': typeof GuestOnlyRegisterRoute
   '/create-post': typeof ProtectedCreatePostRoute
   '/profile': typeof ProtectedProfileRoute
   '/verify-email': typeof ProtectedVerifyEmailRoute
@@ -90,9 +90,9 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/confirm-email': typeof ConfirmEmailRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/forgot-password': typeof GuestForgotPasswordRoute
-  '/login': typeof GuestLoginRoute
-  '/register': typeof GuestRegisterRoute
+  '/forgot-password': typeof GuestOnlyForgotPasswordRoute
+  '/login': typeof GuestOnlyLoginRoute
+  '/register': typeof GuestOnlyRegisterRoute
   '/create-post': typeof ProtectedCreatePostRoute
   '/profile': typeof ProtectedProfileRoute
   '/verify-email': typeof ProtectedVerifyEmailRoute
@@ -100,13 +100,13 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/_guest': typeof GuestRouteWithChildren
+  '/_guest': typeof GuestRoute
   '/_protected': typeof ProtectedRouteWithChildren
   '/confirm-email': typeof ConfirmEmailRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/_guest/forgot-password': typeof GuestForgotPasswordRoute
-  '/_guest/login': typeof GuestLoginRoute
-  '/_guest/register': typeof GuestRegisterRoute
+  '/_guest-only/forgot-password': typeof GuestOnlyForgotPasswordRoute
+  '/_guest-only/login': typeof GuestOnlyLoginRoute
+  '/_guest-only/register': typeof GuestOnlyRegisterRoute
   '/_protected/create-post': typeof ProtectedCreatePostRoute
   '/_protected/profile': typeof ProtectedProfileRoute
   '/_protected/verify-email': typeof ProtectedVerifyEmailRoute
@@ -141,9 +141,9 @@ export interface FileRouteTypes {
     | '/_protected'
     | '/confirm-email'
     | '/reset-password'
-    | '/_guest/forgot-password'
-    | '/_guest/login'
-    | '/_guest/register'
+    | '/_guest-only/forgot-password'
+    | '/_guest-only/login'
+    | '/_guest-only/register'
     | '/_protected/create-post'
     | '/_protected/profile'
     | '/_protected/verify-email'
@@ -151,10 +151,13 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  GuestRoute: typeof GuestRouteWithChildren
+  GuestRoute: typeof GuestRoute
   ProtectedRoute: typeof ProtectedRouteWithChildren
   ConfirmEmailRoute: typeof ConfirmEmailRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  GuestOnlyForgotPasswordRoute: typeof GuestOnlyForgotPasswordRoute
+  GuestOnlyLoginRoute: typeof GuestOnlyLoginRoute
+  GuestOnlyRegisterRoute: typeof GuestOnlyRegisterRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -215,43 +218,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedCreatePostRouteImport
       parentRoute: typeof ProtectedRoute
     }
-    '/_guest/register': {
-      id: '/_guest/register'
+    '/_guest-only/register': {
+      id: '/_guest-only/register'
       path: '/register'
       fullPath: '/register'
-      preLoaderRoute: typeof GuestRegisterRouteImport
-      parentRoute: typeof GuestRoute
+      preLoaderRoute: typeof GuestOnlyRegisterRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_guest/login': {
-      id: '/_guest/login'
+    '/_guest-only/login': {
+      id: '/_guest-only/login'
       path: '/login'
       fullPath: '/login'
-      preLoaderRoute: typeof GuestLoginRouteImport
-      parentRoute: typeof GuestRoute
+      preLoaderRoute: typeof GuestOnlyLoginRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_guest/forgot-password': {
-      id: '/_guest/forgot-password'
+    '/_guest-only/forgot-password': {
+      id: '/_guest-only/forgot-password'
       path: '/forgot-password'
       fullPath: '/forgot-password'
-      preLoaderRoute: typeof GuestForgotPasswordRouteImport
-      parentRoute: typeof GuestRoute
+      preLoaderRoute: typeof GuestOnlyForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
-
-interface GuestRouteChildren {
-  GuestForgotPasswordRoute: typeof GuestForgotPasswordRoute
-  GuestLoginRoute: typeof GuestLoginRoute
-  GuestRegisterRoute: typeof GuestRegisterRoute
-}
-
-const GuestRouteChildren: GuestRouteChildren = {
-  GuestForgotPasswordRoute: GuestForgotPasswordRoute,
-  GuestLoginRoute: GuestLoginRoute,
-  GuestRegisterRoute: GuestRegisterRoute,
-}
-
-const GuestRouteWithChildren = GuestRoute._addFileChildren(GuestRouteChildren)
 
 interface ProtectedRouteChildren {
   ProtectedCreatePostRoute: typeof ProtectedCreatePostRoute
@@ -271,10 +260,13 @@ const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  GuestRoute: GuestRouteWithChildren,
+  GuestRoute: GuestRoute,
   ProtectedRoute: ProtectedRouteWithChildren,
   ConfirmEmailRoute: ConfirmEmailRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  GuestOnlyForgotPasswordRoute: GuestOnlyForgotPasswordRoute,
+  GuestOnlyLoginRoute: GuestOnlyLoginRoute,
+  GuestOnlyRegisterRoute: GuestOnlyRegisterRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,27 +1,68 @@
+import { Box, Typography, Fab } from "@mui/material";
+import { Add } from "@mui/icons-material";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useInView } from "react-intersection-observer";
+
 import Header from "@/components/auth/Header";
-import { Box } from "@mui/material";
-import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { usePosts } from "@/hooks/usePosts";
+import PostsLoading from "@/components/posts/post-list/PostsLoading";
+import PostsError from "@/components/posts/post-list/PostsError";
+import PostNotFound from "@/components/posts/post-list/PostNotFound";
+import PostCard from "@/components/posts/post-list/PostCard";
 
 export const Route = createFileRoute("/")({
-  component: App,
+  component: PostsListPage,
 });
 
-function App() {
+export default function PostsListPage() {
+  const navigate = useNavigate();
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError } = usePosts();
+
+  const posts = data?.pages.flatMap((page) => page.items) ?? [];
+
+  // Intersection Observer
+  const { ref: loadMoreRef } = useInView({
+    threshold: 0,
+    onChange: (inView) => {
+      if (inView && hasNextPage && !isFetchingNextPage) fetchNextPage();
+    },
+  });
+
+  if (isLoading) return <PostsLoading />;
+  if (isError) return <PostsError />;
+
   return (
-    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", gap: 3 }}>
+    <Box sx={{ minHeight: "100vh", backgroundColor: "background.default" }}>
       <Header />
-      <Container sx={{ flexGrow: 1 }}>
-        <Typography variant="h1" gutterBottom>
-          Hello from MUI + TanStack 🚀
-        </Typography>
-        <Button variant="contained" color="primary">
-          Click me
-        </Button>
-        <Link to="/login">Login</Link>
-      </Container>
+
+      <Box sx={{ pt: 4, px: { xs: 2, sm: 4 }, pb: 4 }}>
+        <Box sx={{ maxWidth: 600, mx: "auto" }}>
+          {posts.length === 0 ? <PostNotFound /> : posts.map((post) => <PostCard key={post.id} post={post} />)}
+
+          {/* Sentinel for IntersectionObserver */}
+          <div ref={loadMoreRef} style={{ height: 1 }} />
+
+          {isFetchingNextPage && (
+            <Typography variant="body2" color="text.secondary" sx={{ textAlign: "center", mt: 2 }}>
+              Loading more posts...
+            </Typography>
+          )}
+        </Box>
+      </Box>
+
+      <Fab
+        color="primary"
+        aria-label="create post"
+        sx={{
+          position: "fixed",
+          bottom: 24,
+          right: 24,
+        }}
+        onClick={() => navigate({ to: "/create-post" })}
+      >
+        <Add />
+      </Fab>
     </Box>
   );
 }

@@ -2,7 +2,6 @@ type PostPhoto = {
   id: string;
   url: string;
   publicId: string;
-  postId: string;
 };
 
 type Post = {
@@ -13,6 +12,13 @@ type Post = {
   latitude: string | null;
   longtitude: string | null;
   address: string | null;
-  postPhotos: PostPhoto[];
+  photos: PostPhoto[];
   createdAt: Date;
+  author: {
+    id: string;
+    displayName: string;
+  };
+  likesCount?: number;
+  commentsCount?: number;
+  isLiked?: boolean;
 };
