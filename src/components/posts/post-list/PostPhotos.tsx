@@ -1,8 +1,11 @@
-import { Box, ImageList, ImageListItem, Typography } from "@mui/material";
+import { Box, ImageList, ImageListItem, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { PhotoProvider, PhotoView } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
 
 export default function PostPhotos({ photos }: { photos: PostPhoto[] }) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   if (!photos || photos.length === 0) return null;
 
   if (photos.length === 1) {
@@ -16,7 +19,7 @@ export default function PostPhotos({ photos }: { photos: PostPhoto[] }) {
             loading="lazy"
             sx={{
               width: "100%",
-              height: 250,
+              height: isMobile ? 120 : 250,
               objectFit: "cover",
               borderRadius: 1,
               mb: 2,
@@ -32,7 +35,7 @@ export default function PostPhotos({ photos }: { photos: PostPhoto[] }) {
 
   return (
     <PhotoProvider>
-      <ImageList sx={{ width: "100%", mb: 2 }} cols={3} rowHeight={200} gap={4}>
+      <ImageList sx={{ width: "100%", mb: 2 }} cols={isMobile ? 2 : 3} rowHeight={isMobile ? 120 : 180} gap={4}>
         {previewPhotos.map((photo, index) => {
           const isOverlay = index === 4 && photos.length > 5;
 
