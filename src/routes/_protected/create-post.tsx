@@ -50,14 +50,11 @@ export default function CreatePostPage() {
                 Failed to create post. Please try again.
               </Alert>
             )}
-            <UserInfoSection />
 
+            <UserInfoSection />
             <TitleField control={control} errors={errors} value={titleValue} />
             <ContentField control={control} errors={errors} value={contentValue} />
-
-            {selectedImages.length > 0 && (
-              <SelectedImagesList selectedImages={selectedImages} handleRemoveImage={handleRemoveImage} />
-            )}
+            <SelectedImagesList selectedImages={selectedImages} handleRemoveImage={handleRemoveImage} />
 
             <Divider sx={{ mb: 3 }} />
 

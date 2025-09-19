@@ -5,7 +5,7 @@ export default function PostsLoading() {
   return (
     <Box sx={{ minHeight: "100vh", backgroundColor: "background.default" }}>
       <Header />
-      <Box sx={{ pt: 12, px: { xs: 2, sm: 4 }, pb: 4 }}>
+      <Box sx={{ pt: 4, px: { xs: 2, sm: 4 }, pb: 4 }}>
         <Box sx={{ maxWidth: 600, mx: "auto" }}>
           {[1, 2, 3].map((i) => (
             <Card key={i} sx={{ mb: 3 }}>
