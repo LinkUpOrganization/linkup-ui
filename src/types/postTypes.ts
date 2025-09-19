@@ -22,3 +22,12 @@ type Post = {
   commentsCount?: number;
   isLiked?: boolean;
 };
+
+type LocationCoordinates = {
+  lat: number;
+  lng: number;
+};
+
+type PostLocation = LocationCoordinates & {
+  address?: string;
+};

@@ -7,6 +7,9 @@ import useCreatePost from "@/hooks/useCreatePost";
 import UserInfoSection from "@/components/posts/create-post/UserInfoSection";
 import TitleField from "@/components/posts/create-post/TitleField";
 import ContentField from "@/components/posts/create-post/ContentField";
+import LocationModal from "@/components/posts/create-post/LocationModal";
+import { useState } from "react";
+import SelectLocationButton from "@/components/posts/create-post/SelectLocationButton";
 
 export const Route = createFileRoute("/_protected/create-post")({
   component: CreatePostPage,
@@ -25,26 +28,27 @@ export default function CreatePostPage() {
     handleImageSelect,
     handleRemoveImage,
     selectedImages,
+    location,
+    setLocation,
+    userCurrentLocation,
   } = useCreatePost();
+
+  const [modalOpen, setModalOpen] = useState(false);
 
   return (
     <Box sx={{ minHeight: "100vh", backgroundColor: "background.default" }}>
       <Header />
       <Box
         component="form"
-        onSubmit={handleSubmit(onSubmit)}
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          py: 8,
-          px: 2,
-        }}
+        onSubmit={handleSubmit((data) => onSubmit({ ...data, ...location }))}
+        sx={{ display: "flex", justifyContent: "center", py: 8, px: 2 }}
       >
         <Card sx={{ maxWidth: 600, width: "100%" }}>
           <CardContent sx={{ p: 3 }}>
             <Typography variant="h5" sx={{ mb: 3, fontWeight: 600 }}>
               Create Post
             </Typography>
+
             {isError && (
               <Alert severity="error" sx={{ mb: 3 }}>
                 Failed to create post. Please try again.
@@ -55,6 +59,7 @@ export default function CreatePostPage() {
             <TitleField control={control} errors={errors} value={titleValue} />
             <ContentField control={control} errors={errors} value={contentValue} />
             <SelectedImagesList selectedImages={selectedImages} handleRemoveImage={handleRemoveImage} />
+            <SelectLocationButton location={location} setLocation={setLocation} setModalOpen={setModalOpen} />
 
             <Divider sx={{ mb: 3 }} />
 
@@ -66,6 +71,13 @@ export default function CreatePostPage() {
           </CardContent>
         </Card>
       </Box>
+
+      <LocationModal
+        open={modalOpen}
+        userCurrentLocation={userCurrentLocation}
+        onClose={() => setModalOpen(false)}
+        onSave={(loc) => setLocation(loc)}
+      />
     </Box>
   );
 }

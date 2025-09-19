@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
 
 body {
   @apply m-0;
@@ -11,9 +12,4 @@ body {
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
-}
-
-.leaflet-container {
-  width: 100%;
-  height: 400px;
 }

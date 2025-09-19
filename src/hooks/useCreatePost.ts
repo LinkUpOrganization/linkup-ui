@@ -3,12 +3,14 @@ import { postSchema, type PostFormValues } from "@/schemas/postSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function useCreatePost() {
   const navigate = useNavigate();
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  const [location, setLocation] = useState<PostLocation | null>(null);
+  const [userCurrentLocation, setUserCurrentLocation] = useState<LocationCoordinates | null>(null);
 
   const {
     mutate: handleCreatePost,
@@ -66,6 +68,27 @@ export default function useCreatePost() {
     handleCreatePost(formData);
   };
 
+  const requestUserLocation = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser.");
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude, longitude } = pos.coords;
+        setUserCurrentLocation({ lat: latitude, lng: longitude });
+      },
+      (err) => {
+        console.error("Geolocation error:", err);
+        alert("Unable to retrieve location.");
+      }
+    );
+  };
+
+  useEffect(() => {
+    requestUserLocation();
+  }, []);
+
   return {
     onSubmit,
     handleSubmit,
@@ -78,5 +101,8 @@ export default function useCreatePost() {
     handleImageSelect,
     handleRemoveImage,
     selectedImages,
+    location,
+    setLocation,
+    userCurrentLocation,
   };
 }
