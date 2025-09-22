@@ -24,8 +24,8 @@ type Post = {
 };
 
 type LocationCoordinates = {
-  lat: number;
-  lng: number;
+  latitude: number;
+  longitude: number;
 };
 
 type PostLocation = LocationCoordinates & {

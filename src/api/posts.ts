@@ -22,11 +22,16 @@ export const fetchPosts = async (options?: {
   return response.data;
 };
 
-export const reverseGeocode = async ({ lat, lng }: LocationCoordinates) => {
+export const reverseGeocode = async ({ latitude, longitude }: LocationCoordinates): Promise<string> => {
   // Reverse geocoding з Nominatim
   try {
-    const res = await axios.get(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`);
-    return res.data.display_name || "";
+    const response = await axios.get("https://nominatim.openstreetmap.org/reverse", {
+      params: { lat: latitude, lon: longitude, format: "json" },
+      headers: {
+        "User-Agent": "MyApp/1.0 (myemail@example.com)",
+      },
+    });
+    return response.data.display_name || "";
   } catch (err) {
     console.error("Reverse geocoding failed", err);
     return "";

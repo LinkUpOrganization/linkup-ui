@@ -52,6 +52,7 @@ export default function useCreatePost() {
   };
 
   const onSubmit = (data: PostFormValues) => {
+    console.log(data);
     const formData = new FormData();
 
     formData.append("Title", data.title);
@@ -75,7 +76,7 @@ export default function useCreatePost() {
     }
     navigator.geolocation.getCurrentPosition((pos) => {
       const { latitude, longitude } = pos.coords;
-      setUserCurrentLocation({ lat: latitude, lng: longitude });
+      setUserCurrentLocation({ latitude, longitude });
     });
   };
 

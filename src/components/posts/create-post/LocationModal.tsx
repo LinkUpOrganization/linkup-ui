@@ -20,10 +20,12 @@ export default function LocationModal({
   const [coordinates, setCoordinates] = useState<LocationCoordinates | null>(null);
   const [address, setAddress] = useState("");
   const mapCenter: [number, number] = userCurrentLocation
-    ? [userCurrentLocation.lat, userCurrentLocation.lng]
+    ? [userCurrentLocation.latitude, userCurrentLocation.longitude]
     : KYIV_COORDINATES;
 
   const handleSelect = async (coordinates: LocationCoordinates) => {
+    console.log(coordinates);
+
     setCoordinates(coordinates);
     const address = await reverseGeocode(coordinates);
     setAddress(address);

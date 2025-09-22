@@ -18,7 +18,7 @@ export default function LocationMarker({
   useMapEvents({
     click(e) {
       setPosition([e.latlng.lat, e.latlng.lng]);
-      onSelect({ lat: e.latlng.lat, lng: e.latlng.lng });
+      onSelect({ latitude: e.latlng.lat, longitude: e.latlng.lng });
     },
   });
 
