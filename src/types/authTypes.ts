@@ -5,6 +5,16 @@ type User = {
   isVerified: boolean;
 };
 
+type UserProfile = {
+  id: string;
+  displayName: string;
+  email: string;
+  isVerified: boolean;
+  followersCount: number;
+  followingCount: number;
+  isFollowing: boolean;
+};
+
 type LoginPayload = {
   email: string;
   password: string;
