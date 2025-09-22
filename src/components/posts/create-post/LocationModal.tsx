@@ -2,7 +2,7 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, B
 import { MapContainer, TileLayer } from "react-leaflet";
 import { useState } from "react";
 import LocationMarker from "./LocationMarker";
-import axios from "axios";
+import { reverseGeocode } from "@/api/posts";
 
 const KYIV_COORDINATES: [number, number] = [50.4501, 30.5234];
 
@@ -15,24 +15,23 @@ export default function LocationModal({
   open: boolean;
   onClose: () => void;
   userCurrentLocation: LocationCoordinates | null;
-  onSave: (location: { lat: number; lng: number; address: string }) => void;
+  onSave: (location: PostLocation) => void;
 }) {
-  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [coordinates, setCoordinates] = useState<LocationCoordinates | null>(null);
   const [address, setAddress] = useState("");
   const mapCenter: [number, number] = userCurrentLocation
     ? [userCurrentLocation.lat, userCurrentLocation.lng]
     : KYIV_COORDINATES;
 
-  const handleSelect = async (lat: number, lng: number) => {
-    setLocation({ lat, lng });
+  const handleSelect = async (coordinates: LocationCoordinates) => {
+    setCoordinates(coordinates);
+    const address = await reverseGeocode(coordinates);
+    setAddress(address);
+  };
 
-    // Reverse geocoding з Nominatim
-    try {
-      const res = await axios.get(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`);
-      setAddress(res.data.display_name || "");
-    } catch (err) {
-      console.error("Reverse geocoding failed", err);
-    }
+  const handleSave = () => {
+    if (coordinates) onSave({ ...coordinates, address });
+    onClose();
   };
 
   return (
@@ -53,15 +52,7 @@ export default function LocationModal({
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
-        <Button
-          variant="contained"
-          onClick={() => {
-            if (location) {
-              onSave({ ...location, address });
-            }
-            onClose();
-          }}
-        >
+        <Button variant="contained" onClick={handleSave}>
           Save
         </Button>
       </DialogActions>

@@ -8,13 +8,17 @@ const markerIcon = L.icon({
   iconAnchor: [12, 41],
 });
 
-export default function LocationMarker({ onSelect }: { onSelect: (lat: number, lng: number) => void }) {
+export default function LocationMarker({
+  onSelect,
+}: {
+  onSelect: (coordinates: LocationCoordinates) => Promise<void>;
+}) {
   const [position, setPosition] = useState<[number, number] | null>(null);
 
   useMapEvents({
     click(e) {
       setPosition([e.latlng.lat, e.latlng.lng]);
-      onSelect(e.latlng.lat, e.latlng.lng);
+      onSelect({ lat: e.latlng.lat, lng: e.latlng.lng });
     },
   });
 
