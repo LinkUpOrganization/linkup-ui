@@ -1,12 +1,13 @@
 import Header from "@/components/auth/Header";
 import UserAvatar from "@/components/auth/UserAvatar";
-import { Box, Button, Card, CardContent, Typography, Divider, CircularProgress } from "@mui/material";
+import { Box, Button, Card, CardContent, Typography, Divider, CircularProgress, Alert } from "@mui/material";
 import { createFileRoute, useParams } from "@tanstack/react-router";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import { getUserById } from "@/api/users";
 import { useQuery } from "@tanstack/react-query";
+import useToggleFollow from "@/hooks/useToggleFollow";
 
 export const Route = createFileRoute("/users/$userId")({
   component: UserPage,
@@ -21,23 +22,7 @@ function UserPage() {
     enabled: !!userId,
   });
 
-  const handleFollowToggle = async () => {
-    // setIsLoading(true);
-
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      // setUser((prev) => ({
-      //   ...prev,
-      //   isFollowing: !prev.isFollowing,
-      //   followersCount: prev.isFollowing ? prev.followersCount - 1 : prev.followersCount + 1,
-      // }));
-    } catch (error) {
-      console.error("Error toggling follow status:", error);
-    } finally {
-      // setIsLoading(false);
-    }
-  };
+  const { handleFollowToggle, isToggleFollowPending, isToggleFollowError, toggleFollowError } = useToggleFollow(user);
 
   if (isUserLoading)
     return (
@@ -68,6 +53,9 @@ function UserPage() {
 
       <Box sx={{ display: "flex", justifyContent: "center", flexGrow: 1, mt: 12, px: { xs: 2, sm: 4 } }}>
         <Card sx={{ maxWidth: 600, width: "100%", height: "fit-content" }}>
+          {isToggleFollowError && (
+            <Alert severity="error">{toggleFollowError?.message ?? "Failed to toggle follow state"}</Alert>
+          )}
           <CardContent>
             <Box
               sx={{
@@ -109,7 +97,7 @@ function UserPage() {
                 variant={user.isFollowing ? "outlined" : "contained"}
                 startIcon={user.isFollowing ? <PersonRemoveIcon /> : <PersonAddIcon />}
                 onClick={handleFollowToggle}
-                disabled={false}
+                disabled={isToggleFollowPending}
                 sx={{
                   minWidth: 120,
                   borderRadius: 2,
@@ -129,7 +117,7 @@ function UserPage() {
                   {user.followersCount ?? 0}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Підписників
+                  Followers
                 </Typography>
               </Box>
 
@@ -138,7 +126,7 @@ function UserPage() {
                   {user.followingCount ?? 0}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Підписок
+                  Following
                 </Typography>
               </Box>
             </Box>

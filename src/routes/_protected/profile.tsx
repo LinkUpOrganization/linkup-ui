@@ -1,7 +1,7 @@
 import Header from "@/components/auth/Header";
 import UserAvatar from "@/components/auth/UserAvatar";
 import { useAuth } from "@/contexts/AuthProvider";
-import { Alert, Box, Button, Card, CardContent, CircularProgress, Typography } from "@mui/material";
+import { Alert, Box, Button, Card, CardContent, CircularProgress, Divider, Typography } from "@mui/material";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import { ROUTES } from "@/constants/routes";
@@ -112,6 +112,27 @@ function ProfilePage() {
               <Button variant="contained" disabled={isPending} onClick={() => handleLogout()}>
                 Log out
               </Button>
+            </Box>
+            <Divider sx={{ my: 2 }} />
+
+            <Box sx={{ display: "flex", gap: 3, justifyContent: "center", mb: 2 }}>
+              <Box sx={{ textAlign: "center" }}>
+                <Typography variant="h6" fontWeight="bold">
+                  {user.followersCount ?? 0}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Followers
+                </Typography>
+              </Box>
+
+              <Box sx={{ textAlign: "center" }}>
+                <Typography variant="h6" fontWeight="bold">
+                  {user.followingCount ?? 0}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Following
+                </Typography>
+              </Box>
             </Box>
           </CardContent>
         </Card>

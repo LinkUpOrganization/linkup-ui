@@ -4,6 +4,7 @@ import { Card, CardContent, Box, Typography, IconButton } from "@mui/material";
 import { formatDistanceToNow } from "date-fns";
 import PostPhotos from "./PostPhotos";
 import { memo } from "react";
+import { Link } from "@tanstack/react-router";
 
 type PostCardProps = { post: Post; handleLike: (postId: string, isLikedByCurrentUser: boolean) => void };
 
@@ -12,14 +13,18 @@ const PostCard = memo(function PostCard({ post, handleLike }: PostCardProps) {
     <Card sx={{ mb: 2 }}>
       <CardContent sx={{ p: 2 }}>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1 }}>
-          <UserAvatar
-            id={post.author.id ?? "unknown"}
-            size={40}
-            displayName={post.author?.displayName ?? "Unknown User"}
-          />
+          <Link to="/users/$userId" params={{ userId: post.author.id }}>
+            <UserAvatar
+              id={post.author.id ?? "unknown"}
+              size={40}
+              displayName={post.author?.displayName ?? "Unknown User"}
+            />
+          </Link>
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <Typography variant="subtitle2" fontWeight={600} noWrap>
-              {post.author?.displayName || "Unknown User"}
+              <Link to="/users/$userId" params={{ userId: post.author.id }}>
+                {post.author?.displayName || "Unknown User"}
+              </Link>
               <Typography component="span" variant="caption" color="text.secondary" sx={{ ml: 0.5 }}>
                 • {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
               </Typography>

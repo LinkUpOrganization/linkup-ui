@@ -3,6 +3,8 @@ type User = {
   displayName: string;
   email: string;
   isVerified: boolean;
+  followersCount: number;
+  followingCount: number;
 };
 
 type UserProfile = {
