@@ -37,3 +37,9 @@ export const reverseGeocode = async ({ latitude, longitude }: LocationCoordinate
     return "";
   }
 };
+
+export async function toggleLike(postId: string, isLiked: boolean): Promise<void> {
+  await apiClient.post(`/posts/${postId}/toggle-reaction`, {
+    isLiked,
+  });
+}

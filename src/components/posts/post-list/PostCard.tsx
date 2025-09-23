@@ -5,7 +5,9 @@ import { formatDistanceToNow } from "date-fns";
 import PostPhotos from "./PostPhotos";
 import { memo } from "react";
 
-const PostCard = memo(function PostCard({ post }: { post: Post }) {
+type PostCardProps = { post: Post; handleLike: (postId: string, isLikedByCurrentUser: boolean) => void };
+
+const PostCard = memo(function PostCard({ post, handleLike }: PostCardProps) {
   return (
     <Card sx={{ mb: 2 }}>
       <CardContent sx={{ p: 2 }}>
@@ -51,11 +53,15 @@ const PostCard = memo(function PostCard({ post }: { post: Post }) {
         <PostPhotos photos={post.photos} />
 
         <Box sx={{ display: "flex", alignItems: "center", gap: 1, pt: 1 }}>
-          <IconButton onClick={() => {}} color={true || post.isLiked ? "error" : "default"} size="small">
-            {true || post.isLiked ? <Favorite fontSize="small" /> : <FavoriteBorder fontSize="small" />}
+          <IconButton
+            onClick={() => handleLike(post.id, !!post.isLikedByCurrentUser)}
+            color={post.isLikedByCurrentUser ? "error" : "default"}
+            size="small"
+          >
+            {post.isLikedByCurrentUser ? <Favorite fontSize="small" /> : <FavoriteBorder fontSize="small" />}
           </IconButton>
           <Typography variant="caption" color="text.secondary">
-            {(post.likesCount || 0) + (true ? 1 : 0)}
+            {post.likesCount || 0}
           </Typography>
 
           <IconButton color="default" size="small">

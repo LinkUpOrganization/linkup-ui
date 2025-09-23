@@ -19,7 +19,7 @@ type Post = {
   };
   likesCount?: number;
   commentsCount?: number;
-  isLiked?: boolean;
+  isLikedByCurrentUser?: boolean;
 };
 
 type LocationCoordinates = {

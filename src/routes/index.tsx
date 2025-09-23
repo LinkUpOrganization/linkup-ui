@@ -10,6 +10,7 @@ import PostsLoading from "@/components/posts/post-list/PostsLoading";
 import PostsError from "@/components/posts/post-list/PostsError";
 import PostNotFound from "@/components/posts/post-list/PostNotFound";
 import PostCard from "@/components/posts/post-list/PostCard";
+import { useToggleLike } from "@/hooks/useToggleLike";
 
 export const Route = createFileRoute("/")({
   component: PostsListPage,
@@ -18,6 +19,8 @@ export const Route = createFileRoute("/")({
 export default function PostsListPage() {
   const navigate = useNavigate();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError, tab, setTab } = usePostList();
+  const { handleLike } = useToggleLike({ ascending: false, pageSize: 10 });
+
   const posts = useMemo(() => data?.pages.flatMap((page) => page.items) ?? [], [data]);
 
   const { ref: loadMoreRef } = useInView({
@@ -44,7 +47,11 @@ export default function PostsListPage() {
 
       <Box sx={{ pt: 4, px: { xs: 2, sm: 4 }, pb: 4 }}>
         <Box sx={{ maxWidth: 600, mx: "auto" }}>
-          {posts.length === 0 ? <PostNotFound /> : posts.map((post) => <PostCard key={post.id} post={post} />)}
+          {posts.length === 0 ? (
+            <PostNotFound />
+          ) : (
+            posts.map((post) => <PostCard key={post.id} post={post} handleLike={handleLike} />)
+          )}
 
           {/* Sentinel for IntersectionObserver */}
           {hasNextPage && <div ref={loadMoreRef} style={{ height: 1 }} />}
