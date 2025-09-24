@@ -5,15 +5,21 @@ import { formatDistanceToNow } from "date-fns";
 import PostPhotos from "./PostPhotos";
 import { memo } from "react";
 import { Link } from "@tanstack/react-router";
+import { useAuth } from "@/contexts/AuthProvider";
 
 type PostCardProps = { post: Post; handleLike: (postId: string, isLikedByCurrentUser: boolean) => void };
 
 const PostCard = memo(function PostCard({ post, handleLike }: PostCardProps) {
+  const { user } = useAuth();
+
   return (
     <Card sx={{ mb: 2 }}>
       <CardContent sx={{ p: 2 }}>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1 }}>
-          <Link to="/users/$userId" params={{ userId: post.author.id }}>
+          <Link
+            to={user?.id === post.author.id ? "/profile" : "/users/$userId"}
+            params={user?.id === post.author.id ? undefined : { userId: post.author.id }}
+          >
             <UserAvatar
               id={post.author.id ?? "unknown"}
               size={40}
@@ -22,7 +28,10 @@ const PostCard = memo(function PostCard({ post, handleLike }: PostCardProps) {
           </Link>
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <Typography variant="subtitle2" fontWeight={600} noWrap>
-              <Link to="/users/$userId" params={{ userId: post.author.id }}>
+              <Link
+                to={user?.id === post.author.id ? "/profile" : "/users/$userId"}
+                params={user?.id === post.author.id ? undefined : { userId: post.author.id }}
+              >
                 {post.author?.displayName || "Unknown User"}
               </Link>
               <Typography component="span" variant="caption" color="text.secondary" sx={{ ml: 0.5 }}>
