@@ -3,13 +3,14 @@ import { Box, Button } from "@mui/material";
 import type React from "react";
 import SelectImagesInput from "../create-post/SelectImagesInput";
 import { useNavigate } from "@tanstack/react-router";
+import { MAX_IMAGES_COUNT } from "@/constants/posts";
 
 type EditPostActionsProps = {
   isEditPending: boolean;
   isDeletePending: boolean;
   handleImageSelect: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleDeletePost: () => void;
-  totalImagesCount: number;
+  availableImagesCount: number;
 };
 
 export default function EditPostActions({
@@ -17,9 +18,11 @@ export default function EditPostActions({
   isDeletePending,
   handleImageSelect,
   handleDeletePost,
-  totalImagesCount,
+  availableImagesCount,
 }: EditPostActionsProps) {
   const navigate = useNavigate();
+
+  const totalImagesCount = MAX_IMAGES_COUNT - availableImagesCount;
 
   return (
     <Box

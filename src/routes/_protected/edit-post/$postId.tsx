@@ -52,8 +52,10 @@ export default function EditPostPage() {
     isDeletePending,
     isDeleteError,
     deleteError,
-    totalImagesCount,
+    availableImagesCount,
   } = useEditPost({ postId, initialPost });
+
+  console.log(initialPost);
 
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -76,13 +78,13 @@ export default function EditPostPage() {
 
             {isEditError && (
               <Alert severity="error" sx={{ mb: 3 }}>
-                Failed to update post. {editError.response.data}
+                Failed to update post. {editError?.response?.data ?? ""}
               </Alert>
             )}
 
             {isDeleteError && (
               <Alert severity="error" sx={{ mb: 3 }}>
-                Failed to update post. {deleteError.response.data}
+                Failed to update post. {deleteError?.response?.data ?? ""}
               </Alert>
             )}
 
@@ -104,7 +106,7 @@ export default function EditPostPage() {
               handleDeletePost={handleDeletePost}
               isEditPending={isEditPending}
               isDeletePending={isDeletePending}
-              totalImagesCount={totalImagesCount}
+              availableImagesCount={availableImagesCount}
             />
           </CardContent>
         </Card>

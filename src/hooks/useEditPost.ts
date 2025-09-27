@@ -21,8 +21,10 @@ export default function useEditPost({ postId, initialPost }: UseEditPostProps) {
   const [deletedImages, setDeletedImages] = useState<string[]>([]);
   const [location, setLocation] = useState<PostLocation | null>(null);
 
-  const totalImagesCount =
+  const availableImagesCount =
     MAX_IMAGES_COUNT - (initialPost?.photos.length ?? 0) - selectedImages.length + deletedImages.length;
+
+  console.log(availableImagesCount);
 
   const {
     control,
@@ -81,7 +83,7 @@ export default function useEditPost({ postId, initialPost }: UseEditPostProps) {
   const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (initialPost == null) return;
     const files = Array.from(event.target.files || []);
-    const filesToAdd = files.slice(0, totalImagesCount);
+    const filesToAdd = files.slice(0, availableImagesCount);
 
     setSelectedImages((prev) => [...prev, ...filesToAdd]);
     event.target.value = "";
@@ -101,9 +103,11 @@ export default function useEditPost({ postId, initialPost }: UseEditPostProps) {
     const formData = new FormData();
     if (data.title != initialPost.title) formData.append("Title", data.title);
     if (data.content != null && data?.content != initialPost.content) formData.append("Content", data.content);
-    if (data.latitude) formData.append("Latitude", String(data.latitude));
-    if (data.longitude) formData.append("Longitude", String(data.longitude));
-    if (data.address) formData.append("Address", data.address);
+    if (data.latitude && String(data.latitude) != initialPost.latitude)
+      formData.append("Latitude", String(data.latitude));
+    if (data.longitude && String(data.longitude) != initialPost.longitude)
+      formData.append("Longitude", String(data.longitude));
+    if (data.address && data.address != initialPost.address) formData.append("Address", data.address);
     selectedImages.forEach((file) => {
       formData.append("PhotosToAdd", file);
     });
@@ -112,7 +116,6 @@ export default function useEditPost({ postId, initialPost }: UseEditPostProps) {
     });
 
     handleEditPost({ postId, data: formData });
-    setSelectedImages([]);
   };
 
   const {
@@ -153,6 +156,6 @@ export default function useEditPost({ postId, initialPost }: UseEditPostProps) {
     isDeletePending,
     isDeleteError,
     deleteError,
-    totalImagesCount,
+    availableImagesCount,
   };
 }

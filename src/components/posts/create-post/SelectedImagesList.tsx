@@ -15,6 +15,8 @@ export default function SelectedImagesList({
   handleRemoveSelectedImage,
   handleRemoveExistingImage = () => {},
 }: SelectedImagesProps) {
+  console.log(existingImages);
+
   const [localExistingImages, setLocalExistingImages] = useState<PostPhoto[]>(existingImages);
   const totalImages = selectedImages.length + localExistingImages.length;
 
