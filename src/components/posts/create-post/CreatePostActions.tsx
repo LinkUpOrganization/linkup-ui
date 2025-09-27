@@ -21,10 +21,14 @@ export default function CreatePostActions({ isPending, handleImageSelect, select
         alignItems: "center",
       }}
     >
-      <SelectImagesInput selectedImages={selectedImages} handleImageSelect={handleImageSelect} />
+      <SelectImagesInput selectedImagesCount={selectedImages.length} handleImageSelect={handleImageSelect} />
 
       <Box sx={{ display: "flex", gap: 2 }}>
-        <Button variant="outlined" onClick={() => navigate({ to: "/" })} disabled={isPending}>
+        <Button
+          variant="outlined"
+          onClick={() => navigate({ to: "/", search: { filter: "recent" } })}
+          disabled={isPending}
+        >
           Cancel
         </Button>
         <Button type="submit" variant="contained" disabled={isPending} startIcon={<Send />}>

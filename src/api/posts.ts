@@ -7,6 +7,11 @@ export async function createPost(data: FormData): Promise<string> {
   return response.data;
 }
 
+export async function updatePost({ postId, data }: { postId: string; data: FormData }): Promise<string> {
+  const response = await apiClient.patch(`/posts/${postId}`, data);
+  return response.data;
+}
+
 export const fetchPosts = async ({ filter, cursor, pageSize }: FetchPostsProps): Promise<PagedResult<Post>> => {
   const response = await apiClient.get("/posts", {
     params: {
@@ -39,3 +44,13 @@ export async function toggleLike(postId: string, isLiked: boolean): Promise<void
     isLiked,
   });
 }
+
+export const getPostById = async (postId: string): Promise<Post> => {
+  const response = await apiClient.get(`/posts/${postId}`);
+  return response.data;
+};
+
+export const deletePostById = async (postId: string): Promise<void> => {
+  const response = await apiClient.delete(`/posts/${postId}`);
+  return response.data;
+};

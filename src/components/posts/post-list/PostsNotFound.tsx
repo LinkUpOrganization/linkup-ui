@@ -1,15 +1,7 @@
 import Header from "@/components/auth/Header";
 import { Box, Card, CardContent, Typography } from "@mui/material";
 
-type PostNotFoundProps = {
-  title?: string;
-  message?: string;
-};
-
-export default function PostNotFound({
-  title = "Post not found",
-  message = "The post you are looking for does not exist or has been removed.",
-}: PostNotFoundProps) {
+export default function PostsNotFound() {
   return (
     <Box sx={{ minHeight: "100vh", backgroundColor: "background.default" }}>
       <Header />
@@ -18,10 +10,10 @@ export default function PostNotFound({
           <Card sx={{ textAlign: "center", py: 6 }}>
             <CardContent>
               <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>
-                {title}
+                No posts yet
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {message}
+                Be the first to share something amazing!
               </Typography>
             </CardContent>
           </Card>

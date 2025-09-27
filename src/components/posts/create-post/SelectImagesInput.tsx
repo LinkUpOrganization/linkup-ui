@@ -1,28 +1,30 @@
 import { PhotoCamera } from "@mui/icons-material";
-import { Box, IconButton } from "@mui/material";
+import { Button } from "@mui/material";
+import type React from "react";
 
-type SelectImageInputProps = {
-  selectedImages: File[];
+type SelectImagesInputProps = {
+  selectedImagesCount: number;
   handleImageSelect: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  maxImages?: number;
 };
 
-export default function SelectImagesInput({ handleImageSelect, selectedImages }: SelectImageInputProps) {
+export default function SelectImagesInput({
+  selectedImagesCount,
+  handleImageSelect,
+  maxImages = 5,
+}: SelectImagesInputProps) {
+  const isMaxReached = selectedImagesCount >= maxImages;
+
   return (
-    <Box>
-      <input
-        accept="image/*"
-        style={{ display: "none" }}
-        id="image-upload"
-        multiple
-        type="file"
-        onChange={handleImageSelect}
-        disabled={selectedImages.length >= 5}
-      />
-      <label htmlFor="image-upload">
-        <IconButton color="primary" component="span" disabled={selectedImages.length >= 5}>
-          <PhotoCamera />
-        </IconButton>
-      </label>
-    </Box>
+    <Button
+      variant="outlined"
+      component="label"
+      startIcon={<PhotoCamera />}
+      disabled={isMaxReached}
+      sx={{ textTransform: "none" }}
+    >
+      {isMaxReached ? "Max images reached" : "Add Photos"}
+      <input type="file" hidden multiple accept="image/*" onChange={handleImageSelect} disabled={isMaxReached} />
+    </Button>
   );
 }

@@ -21,6 +21,7 @@ import { Route as ProtectedCreatePostRouteImport } from './routes/_protected/cre
 import { Route as GuestOnlyRegisterRouteImport } from './routes/_guest-only/register'
 import { Route as GuestOnlyLoginRouteImport } from './routes/_guest-only/login'
 import { Route as GuestOnlyForgotPasswordRouteImport } from './routes/_guest-only/forgot-password'
+import { Route as ProtectedEditPostPostIdRouteImport } from './routes/_protected/edit-post/$postId'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
@@ -80,6 +81,11 @@ const GuestOnlyForgotPasswordRoute = GuestOnlyForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProtectedEditPostPostIdRoute = ProtectedEditPostPostIdRouteImport.update({
+  id: '/edit-post/$postId',
+  path: '/edit-post/$postId',
+  getParentRoute: () => ProtectedRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -92,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProtectedProfileRoute
   '/verify-email': typeof ProtectedVerifyEmailRoute
   '/users/$userId': typeof UsersUserIdRoute
+  '/edit-post/$postId': typeof ProtectedEditPostPostIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -104,6 +111,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ProtectedProfileRoute
   '/verify-email': typeof ProtectedVerifyEmailRoute
   '/users/$userId': typeof UsersUserIdRoute
+  '/edit-post/$postId': typeof ProtectedEditPostPostIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -119,6 +127,7 @@ export interface FileRoutesById {
   '/_protected/profile': typeof ProtectedProfileRoute
   '/_protected/verify-email': typeof ProtectedVerifyEmailRoute
   '/users/$userId': typeof UsersUserIdRoute
+  '/_protected/edit-post/$postId': typeof ProtectedEditPostPostIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -133,6 +142,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/verify-email'
     | '/users/$userId'
+    | '/edit-post/$postId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -145,6 +155,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/verify-email'
     | '/users/$userId'
+    | '/edit-post/$postId'
   id:
     | '__root__'
     | '/'
@@ -159,6 +170,7 @@ export interface FileRouteTypes {
     | '/_protected/profile'
     | '/_protected/verify-email'
     | '/users/$userId'
+    | '/_protected/edit-post/$postId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -259,6 +271,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuestOnlyForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_protected/edit-post/$postId': {
+      id: '/_protected/edit-post/$postId'
+      path: '/edit-post/$postId'
+      fullPath: '/edit-post/$postId'
+      preLoaderRoute: typeof ProtectedEditPostPostIdRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
   }
 }
 
@@ -266,12 +285,14 @@ interface ProtectedRouteChildren {
   ProtectedCreatePostRoute: typeof ProtectedCreatePostRoute
   ProtectedProfileRoute: typeof ProtectedProfileRoute
   ProtectedVerifyEmailRoute: typeof ProtectedVerifyEmailRoute
+  ProtectedEditPostPostIdRoute: typeof ProtectedEditPostPostIdRoute
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
   ProtectedCreatePostRoute: ProtectedCreatePostRoute,
   ProtectedProfileRoute: ProtectedProfileRoute,
   ProtectedVerifyEmailRoute: ProtectedVerifyEmailRoute,
+  ProtectedEditPostPostIdRoute: ProtectedEditPostPostIdRoute,
 }
 
 const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(

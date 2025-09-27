@@ -7,7 +7,7 @@ import Header from "@/components/auth/Header";
 import { usePostList } from "@/hooks/usePostList";
 import PostsLoading from "@/components/posts/post-list/PostsLoading";
 import PostsError from "@/components/posts/post-list/PostsError";
-import PostNotFound from "@/components/posts/post-list/PostNotFound";
+import PostsNotFound from "@/components/posts/post-list/PostsNotFound";
 import PostCard from "@/components/posts/post-list/PostCard";
 import { useToggleLike } from "@/hooks/useToggleLike";
 
@@ -64,7 +64,7 @@ export default function PostsListPage() {
       <Box sx={{ pt: 4, px: { xs: 2, sm: 4 }, pb: 4 }}>
         <Box sx={{ maxWidth: 600, mx: "auto" }}>
           {posts.length === 0 ? (
-            <PostNotFound />
+            <PostsNotFound />
           ) : (
             posts.map((post) => <PostCard key={post.id} post={post} handleLike={handleLike} />)
           )}

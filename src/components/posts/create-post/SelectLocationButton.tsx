@@ -1,4 +1,4 @@
-import { Button, Box, Typography, IconButton } from "@mui/material";
+import { Button } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 type SelectLocationButtonProps = {
@@ -18,33 +18,18 @@ export default function SelectLocationButton({ location, setLocation, setModalOp
         textTransform: "none",
       }}
       onClick={() => setModalOpen(true)}
-    >
-      {location?.address ? (
-        <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
-          <Typography
-            variant="body2"
-            sx={{
-              flexGrow: 1,
-              overflow: "hidden",
-              whiteSpace: "nowrap",
-              textOverflow: "ellipsis",
-            }}
-          >
-            📍 {location.address}
-          </Typography>
-          <IconButton
-            size="small"
+      endIcon={
+        location?.address && (
+          <CloseIcon
             onClick={(e) => {
               e.stopPropagation();
               setLocation(null);
             }}
-          >
-            <CloseIcon fontSize="small" />
-          </IconButton>
-        </Box>
-      ) : (
-        "Add location"
-      )}
+          />
+        )
+      }
+    >
+      {location?.address ? `📍 ${location.address}` : "Add location"}
     </Button>
   );
 }

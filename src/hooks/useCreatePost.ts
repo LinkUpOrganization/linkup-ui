@@ -10,7 +10,7 @@ export default function useCreatePost() {
   const navigate = useNavigate();
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [location, setLocation] = useState<PostLocation | null>(null);
-  const [userCurrentLocation, setUserCurrentLocation] = useState<LocationCoordinates | null>(null);
+  const [userCurrentLocation, setUserCurrentLocation] = useState<PostLocation | null>(null);
 
   const {
     mutate: handleCreatePost,
@@ -19,7 +19,7 @@ export default function useCreatePost() {
   } = useMutation({
     mutationFn: createPost,
     onSuccess: () => {
-      navigate({ to: "/" });
+      navigate({ to: "/", search: { filter: "recent" } });
     },
     onError: (error: any) => {
       console.error("Failed to create post:", error);
@@ -76,7 +76,7 @@ export default function useCreatePost() {
     }
     navigator.geolocation.getCurrentPosition((pos) => {
       const { latitude, longitude } = pos.coords;
-      setUserCurrentLocation({ latitude, longitude });
+      setUserCurrentLocation({ latitude, longitude, address: null });
     });
   };
 

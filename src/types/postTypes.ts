@@ -9,7 +9,7 @@ type Post = {
   title: string;
   content: string | null;
   latitude: string | null;
-  longtitude: string | null;
+  longitude: string | null;
   address: string | null;
   photos: PostPhoto[];
   createdAt: Date;
@@ -28,7 +28,7 @@ type LocationCoordinates = {
 };
 
 type PostLocation = LocationCoordinates & {
-  address?: string;
+  address: string | null;
 };
 
 type PostFilterType = "top" | "recent" | "following";

@@ -6,26 +6,21 @@ import { reverseGeocode } from "@/api/posts";
 
 const KYIV_COORDINATES: [number, number] = [50.4501, 30.5234];
 
-export default function LocationModal({
-  open,
-  userCurrentLocation,
-  onClose,
-  onSave,
-}: {
+type LocationModalProps = {
   open: boolean;
   onClose: () => void;
-  userCurrentLocation: LocationCoordinates | null;
   onSave: (location: PostLocation) => void;
-}) {
+  intialLocation: PostLocation | null;
+};
+
+export default function LocationModal({ open, onClose, onSave, intialLocation }: LocationModalProps) {
   const [coordinates, setCoordinates] = useState<LocationCoordinates | null>(null);
-  const [address, setAddress] = useState("");
-  const mapCenter: [number, number] = userCurrentLocation
-    ? [userCurrentLocation.latitude, userCurrentLocation.longitude]
+  const [address, setAddress] = useState(intialLocation?.address ?? "");
+  const mapCenter: [number, number] = intialLocation
+    ? [intialLocation.latitude, intialLocation.longitude]
     : KYIV_COORDINATES;
 
   const handleSelect = async (coordinates: LocationCoordinates) => {
-    console.log(coordinates);
-
     setCoordinates(coordinates);
     const address = await reverseGeocode(coordinates);
     setAddress(address);

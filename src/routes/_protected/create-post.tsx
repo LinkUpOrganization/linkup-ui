@@ -58,7 +58,7 @@ export default function CreatePostPage() {
             <UserInfoSection />
             <TitleField control={control} errors={errors} value={titleValue} />
             <ContentField control={control} errors={errors} value={contentValue} />
-            <SelectedImagesList selectedImages={selectedImages} handleRemoveImage={handleRemoveImage} />
+            <SelectedImagesList selectedImages={selectedImages} handleRemoveSelectedImage={handleRemoveImage} />
             <SelectLocationButton location={location} setLocation={setLocation} setModalOpen={setModalOpen} />
 
             <Divider sx={{ mb: 3 }} />
@@ -74,7 +74,7 @@ export default function CreatePostPage() {
 
       <LocationModal
         open={modalOpen}
-        userCurrentLocation={userCurrentLocation}
+        intialLocation={userCurrentLocation}
         onClose={() => setModalOpen(false)}
         onSave={(loc) => setLocation(loc)}
       />

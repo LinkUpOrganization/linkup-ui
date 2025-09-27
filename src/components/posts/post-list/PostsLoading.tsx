@@ -1,14 +1,18 @@
 import Header from "@/components/auth/Header";
 import { Box, Card, CardContent, Skeleton } from "@mui/material";
 
-export default function PostsLoading() {
+type PostsLoadingProps = {
+  cardNumber?: number;
+};
+
+export default function PostsLoading({ cardNumber = 3 }: PostsLoadingProps) {
   return (
     <Box sx={{ minHeight: "100vh", backgroundColor: "background.default" }}>
       <Header />
       <Box sx={{ pt: 12, px: { xs: 2, sm: 4 }, pb: 4 }}>
         <Box sx={{ maxWidth: 600, mx: "auto" }}>
-          {[1, 2, 3].map((i) => (
-            <Card key={i} sx={{ mb: 3 }}>
+          {Array.from({ length: cardNumber }).map((_, index) => (
+            <Card key={index} sx={{ mb: 3 }}>
               <CardContent sx={{ p: 3 }}>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
                   <Skeleton variant="circular" width={40} height={40} />
