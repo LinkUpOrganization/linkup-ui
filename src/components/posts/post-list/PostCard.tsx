@@ -39,7 +39,7 @@ const PostCard = memo(function PostCard({ post, handleLike }: PostCardProps) {
               </Typography>
             </Typography>
 
-            {post.address && (
+            {post.address && post.latitude && post.longitude && (
               <Box sx={{ display: "flex", alignItems: "center", minWidth: 0 }}>
                 <Typography
                   variant="caption"
@@ -47,7 +47,17 @@ const PostCard = memo(function PostCard({ post, handleLike }: PostCardProps) {
                   noWrap
                   sx={{ flex: 1, textOverflow: "ellipsis", overflow: "hidden" }}
                 >
-                  {post.address}
+                  <Link
+                    to="/locations"
+                    search={{
+                      latitude: +post.latitude,
+                      longitude: +post.longitude,
+                      radius: 10,
+                      filter: "recent",
+                    }}
+                  >
+                    {post.address}
+                  </Link>
                 </Typography>
               </Box>
             )}

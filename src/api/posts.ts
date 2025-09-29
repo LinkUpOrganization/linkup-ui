@@ -17,6 +17,7 @@ export const fetchPosts = async ({
   cursor,
   latitude,
   longitude,
+  radius,
   pageSize,
 }: FetchPostsProps): Promise<PagedResult<Post>> => {
   const response = await apiClient.get("/posts", {
@@ -25,6 +26,7 @@ export const fetchPosts = async ({
       cursor,
       latitude,
       longitude,
+      radius,
       pageSize: pageSize ?? 10,
     },
   });
@@ -36,9 +38,6 @@ export const reverseGeocode = async ({ latitude, longitude }: LocationCoordinate
   try {
     const response = await axios.get("https://nominatim.openstreetmap.org/reverse", {
       params: { lat: latitude, lon: longitude, format: "json" },
-      headers: {
-        "User-Agent": "MyApp/1.0 (myemail@example.com)",
-      },
     });
     return response.data.display_name || "";
   } catch (err) {

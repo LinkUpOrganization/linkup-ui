@@ -16,7 +16,6 @@ import {
   useTheme,
 } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
-import { ROUTES } from "@/constants/routes";
 import { Link } from "@tanstack/react-router";
 import internet from "@/assets/internet.svg";
 import AuthButton from "./AuthButton";
@@ -34,7 +33,7 @@ export default function Header({ currentPage }: HeaderProps) {
     setMobileOpen(!mobileOpen);
   };
 
-  const navItems = [{ label: "Home", href: ROUTES.HOME }];
+  const navItems = [{ label: "Home", href: "/" }];
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
@@ -75,7 +74,8 @@ export default function Header({ currentPage }: HeaderProps) {
         <Toolbar disableGutters sx={{ display: "flex", justifyContent: "space-between" }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Link
-              to={ROUTES.HOME}
+              to={"/"}
+              search={{ filter: "recent" }}
               style={{
                 display: "flex",
                 alignItems: "center",

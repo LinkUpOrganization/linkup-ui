@@ -16,6 +16,7 @@ export const Route = createFileRoute("/locations")({
       filter: (search.filter as PostFilterType) ?? "recent",
       latitude: search.latitude as number,
       longitude: search.longitude as number,
+      radius: search.radius as number,
     };
   },
   component: LocationsPage,
@@ -23,7 +24,7 @@ export const Route = createFileRoute("/locations")({
 
 function LocationsPage() {
   const navigate = Route.useNavigate();
-  const { filter, latitude, longitude } = Route.useSearch();
+  const { filter, latitude, longitude, radius } = Route.useSearch();
 
   const setFilter = (newFilter: PostFilterType) => {
     navigate({
@@ -38,7 +39,8 @@ function LocationsPage() {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError } = usePostList(
     filter,
     latitude,
-    longitude
+    longitude,
+    radius
   );
   const { handleLike } = useToggleLike({ filter, pageSize: 10 });
 
