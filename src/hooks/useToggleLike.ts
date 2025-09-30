@@ -3,12 +3,13 @@ import { toggleLike } from "../api/posts";
 import type { PagedResult } from "./usePostList";
 import { useCallback } from "react";
 
-type UseToggleLikeProps = {
-  filter: PostFilterType;
-  pageSize: number;
-};
-
-export function useToggleLike({ filter, pageSize }: UseToggleLikeProps) {
+export function useToggleLike(
+  filter: PostFilterType,
+  latitude?: number,
+  longitude?: number,
+  radius?: number,
+  pageSize = 10
+) {
   const queryClient = useQueryClient();
 
   const toggleLikeMutation = useMutation({
@@ -20,27 +21,39 @@ export function useToggleLike({ filter, pageSize }: UseToggleLikeProps) {
 
       const prevData = queryClient.getQueryData<InfiniteData<PagedResult<Post>>>(["posts"]);
 
-      queryClient.setQueryData<InfiniteData<PagedResult<Post>>>(["posts", { filter, pageSize }], (oldData) => {
-        if (!oldData) return oldData;
+      queryClient.setQueryData<InfiniteData<PagedResult<Post>>>(
+        [
+          "posts",
+          {
+            filter,
+            pageSize,
+            ...(latitude !== undefined && { latitude }),
+            ...(longitude !== undefined && { longitude }),
+            ...(radius !== undefined && { radius }),
+          },
+        ],
+        (oldData) => {
+          if (!oldData) return oldData;
 
-        const newData = {
-          ...oldData,
-          pages: oldData.pages.map((page: any) => ({
-            ...page,
-            items: page.items.map((p: Post) =>
-              p.id === postId
-                ? {
-                    ...p,
-                    isLikedByCurrentUser: isLiked,
-                    likesCount: (p.likesCount ?? 0) + (isLiked ? 1 : -1),
-                  }
-                : p
-            ),
-          })),
-        };
+          const newData = {
+            ...oldData,
+            pages: oldData.pages.map((page: any) => ({
+              ...page,
+              items: page.items.map((p: Post) =>
+                p.id === postId
+                  ? {
+                      ...p,
+                      isLikedByCurrentUser: isLiked,
+                      likesCount: (p.likesCount ?? 0) + (isLiked ? 1 : -1),
+                    }
+                  : p
+              ),
+            })),
+          };
 
-        return newData;
-      });
+          return newData;
+        }
+      );
 
       return { prevData };
     },

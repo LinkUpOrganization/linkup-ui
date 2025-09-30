@@ -35,7 +35,7 @@ export default function PostsListPage() {
   };
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError } = usePostList(filter);
-  const { handleLike } = useToggleLike({ filter, pageSize: 10 });
+  const { handleLike } = useToggleLike(filter);
 
   const posts = useMemo(() => data?.pages.flatMap((page) => page.items) ?? [], [data]);
 

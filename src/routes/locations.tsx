@@ -51,7 +51,7 @@ function LocationsPage() {
     mapCenter[1],
     radius
   );
-  const { handleLike } = useToggleLike({ filter, pageSize: 10 });
+  const { handleLike } = useToggleLike(filter, mapCenter[0], mapCenter[1], radius);
 
   const posts = useMemo(() => data?.pages.flatMap((page) => page.items) ?? [], [data]);
 
