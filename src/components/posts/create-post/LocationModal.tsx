@@ -1,10 +1,8 @@
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Box } from "@mui/material";
-import { MapContainer, TileLayer } from "react-leaflet";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from "@mui/material";
 import { useState } from "react";
-import LocationMarker from "./LocationMarker";
 import { reverseGeocode } from "@/api/posts";
-
-const KYIV_COORDINATES: [number, number] = [50.4501, 30.5234];
+import Map from "../location/Map";
+import { KYIV_COORDINATES } from "@/constants/posts";
 
 type LocationModalProps = {
   open: boolean;
@@ -35,15 +33,7 @@ export default function LocationModal({ open, onClose, onSave, intialLocation }:
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle>Select Location</DialogTitle>
       <DialogContent>
-        <Box sx={{ height: 300, mb: 2 }}>
-          <MapContainer center={mapCenter} zoom={12} style={{ height: "100%", width: "100%" }}>
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <LocationMarker onSelect={handleSelect} />
-          </MapContainer>
-        </Box>
+        <Map handleSelect={handleSelect} mapCenter={mapCenter} />
 
         <TextField fullWidth label="Address" value={address} onChange={(e) => setAddress(e.target.value)} />
       </DialogContent>

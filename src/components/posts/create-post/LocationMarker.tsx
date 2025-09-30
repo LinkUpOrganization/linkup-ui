@@ -1,6 +1,5 @@
 import { Marker, useMapEvents } from "react-leaflet";
 import L from "leaflet";
-import { useState } from "react";
 
 const markerIcon = L.icon({
   iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
@@ -8,17 +7,16 @@ const markerIcon = L.icon({
   iconAnchor: [12, 41],
 });
 
-export default function LocationMarker({
-  onSelect,
-}: {
+type LocationMarkerProps = {
   onSelect: (coordinates: LocationCoordinates) => Promise<void>;
-}) {
-  const [position, setPosition] = useState<[number, number] | null>(null);
+  position?: [number, number];
+};
 
+export default function LocationMarker({ onSelect, position }: LocationMarkerProps) {
   useMapEvents({
     click(e) {
-      setPosition([e.latlng.lat, e.latlng.lng]);
-      onSelect({ latitude: e.latlng.lat, longitude: e.latlng.lng });
+      const newPos: [number, number] = [e.latlng.lat, e.latlng.lng];
+      onSelect({ latitude: newPos[0], longitude: newPos[1] });
     },
   });
 

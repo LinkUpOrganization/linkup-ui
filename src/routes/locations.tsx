@@ -1,8 +1,10 @@
 import Header from "@/components/auth/Header";
+import Map from "@/components/posts/location/Map";
 import PostCard from "@/components/posts/post-list/PostCard";
 import PostsError from "@/components/posts/post-list/PostsError";
 import PostsLoading from "@/components/posts/post-list/PostsLoading";
 import PostsNotFound from "@/components/posts/post-list/PostsNotFound";
+import { KYIV_COORDINATES } from "@/constants/posts";
 import { usePostList } from "@/hooks/usePostList";
 import { useToggleLike } from "@/hooks/useToggleLike";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
@@ -14,9 +16,9 @@ export const Route = createFileRoute("/locations")({
   validateSearch: (search: Record<string, unknown>) => {
     return {
       filter: (search.filter as PostFilterType) ?? "recent",
-      latitude: search.latitude as number,
-      longitude: search.longitude as number,
-      radius: search.radius as number,
+      latitude: search.latitude ? Number(search.latitude) : undefined,
+      longitude: search.longitude ? Number(search.longitude) : undefined,
+      radius: search.radius ? Number(search.radius) : undefined,
     };
   },
   component: LocationsPage,
@@ -25,12 +27,19 @@ export const Route = createFileRoute("/locations")({
 function LocationsPage() {
   const navigate = Route.useNavigate();
   const { filter, latitude, longitude, radius } = Route.useSearch();
+  const mapCenter: [number, number] = latitude && longitude ? [latitude, longitude] : KYIV_COORDINATES;
 
-  const setFilter = (newFilter: PostFilterType) => {
+  const handleSelectLocation = async (coordinates: LocationCoordinates) => {
+    setFilter(filter, { latitude: coordinates.latitude, longitude: coordinates.longitude });
+  };
+
+  const setFilter = (newFilter: PostFilterType, coordinates?: LocationCoordinates) => {
     navigate({
       search: (prev) => ({
         ...prev,
         filter: newFilter,
+        latitude: coordinates?.latitude,
+        longitude: coordinates?.longitude,
       }),
       replace: true,
     });
@@ -38,8 +47,8 @@ function LocationsPage() {
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError } = usePostList(
     filter,
-    latitude,
-    longitude,
+    mapCenter[0],
+    mapCenter[1],
     radius
   );
   const { handleLike } = useToggleLike({ filter, pageSize: 10 });
@@ -55,14 +64,20 @@ function LocationsPage() {
     },
   });
 
-  if (isLoading) return <PostsLoading />;
   if (isError) return <PostsError />;
 
   return (
     <Box sx={{ minHeight: "100vh", backgroundColor: "background.default" }}>
       <Header />
 
-      <Tabs sx={{ mt: 2 }} value={filter} onChange={(_, newValue) => setFilter(newValue)} centered>
+      <Map mapCenter={mapCenter} handleSelect={handleSelectLocation} boxStyles={{ height: 250 }} />
+
+      <Tabs
+        sx={{ mt: 2 }}
+        value={filter}
+        onChange={(_, newValue) => setFilter(newValue, latitude && longitude ? { latitude, longitude } : undefined)}
+        centered
+      >
         <Tab label="Recent" value="recent" />
         <Tab label="Top" value="top" />
         <Tab label="Following" value="following" />
@@ -70,7 +85,9 @@ function LocationsPage() {
 
       <Box sx={{ pt: 4, px: { xs: 2, sm: 4 }, pb: 4 }}>
         <Box sx={{ maxWidth: 600, mx: "auto" }}>
-          {posts.length === 0 ? (
+          {isLoading ? (
+            <PostsLoading />
+          ) : posts.length === 0 ? (
             <PostsNotFound />
           ) : (
             posts.map((post) => <PostCard key={post.id} post={post} handleLike={handleLike} />)

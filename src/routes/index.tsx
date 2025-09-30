@@ -48,12 +48,11 @@ export default function PostsListPage() {
     },
   });
 
-  if (isLoading) return <PostsLoading />;
   if (isError) return <PostsError />;
 
   return (
     <Box sx={{ minHeight: "100vh", backgroundColor: "background.default" }}>
-      <Header />
+      <Header currentPage="Home" />
 
       <Tabs sx={{ mt: 2 }} value={filter} onChange={(_, newValue) => setFilter(newValue)} centered>
         <Tab label="Recent" value="recent" />
@@ -63,7 +62,9 @@ export default function PostsListPage() {
 
       <Box sx={{ pt: 4, px: { xs: 2, sm: 4 }, pb: 4 }}>
         <Box sx={{ maxWidth: 600, mx: "auto" }}>
-          {posts.length === 0 ? (
+          {isLoading ? (
+            <PostsLoading />
+          ) : posts.length === 0 ? (
             <PostsNotFound />
           ) : (
             posts.map((post) => <PostCard key={post.id} post={post} handleLike={handleLike} />)
