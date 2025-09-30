@@ -1,5 +1,6 @@
 import Header from "@/components/auth/Header";
 import Map from "@/components/posts/location/Map";
+import RadiusPickerButton from "@/components/posts/location/RadiusPickerButton";
 import PostCard from "@/components/posts/post-list/PostCard";
 import PostsError from "@/components/posts/post-list/PostsError";
 import PostsLoading from "@/components/posts/post-list/PostsLoading";
@@ -29,20 +30,31 @@ function LocationsPage() {
   const { filter, latitude, longitude, radius } = Route.useSearch();
   const mapCenter: [number, number] = latitude && longitude ? [latitude, longitude] : KYIV_COORDINATES;
 
-  const handleSelectLocation = async (coordinates: LocationCoordinates) => {
-    setFilter(filter, { latitude: coordinates.latitude, longitude: coordinates.longitude });
-  };
-
-  const setFilter = (newFilter: PostFilterType, coordinates?: LocationCoordinates) => {
+  const setFilter = (newFilter: PostFilterType, coordinates?: LocationCoordinates, newRadius?: number) => {
     navigate({
       search: (prev) => ({
         ...prev,
         filter: newFilter,
         latitude: coordinates?.latitude,
         longitude: coordinates?.longitude,
+        radius: newRadius ?? prev.radius,
       }),
       replace: true,
     });
+  };
+
+  const handleSelectLocation = async (coordinates: LocationCoordinates) => {
+    setFilter(filter, { latitude: coordinates.latitude, longitude: coordinates.longitude }, radius);
+  };
+
+  const radiusOptions = [0.1, 1, 5, 10, 20];
+  const radiusValue = radius || radiusOptions[0];
+
+  const handleChangeRadius = () => {
+    const currentIndex = radiusOptions.indexOf(radius ?? radiusOptions[0]);
+    const nextIndex = (currentIndex + 1) % radiusOptions.length;
+    const newRadius = radiusOptions[nextIndex];
+    setFilter(filter, latitude && longitude ? { latitude, longitude } : undefined, newRadius);
   };
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError } = usePostList(
@@ -70,12 +82,17 @@ function LocationsPage() {
     <Box sx={{ minHeight: "100vh", backgroundColor: "background.default" }}>
       <Header currentPage="Locations" />
 
-      <Map mapCenter={mapCenter} handleSelect={handleSelectLocation} boxStyles={{ height: 250 }} />
+      <Box sx={{ position: "relative" }}>
+        <Map mapCenter={mapCenter} handleSelect={handleSelectLocation} boxStyles={{ height: 250 }} />
+        <RadiusPickerButton radius={radiusValue} handleChangeRadius={handleChangeRadius} />
+      </Box>
 
       <Tabs
         sx={{ mt: 2 }}
         value={filter}
-        onChange={(_, newValue) => setFilter(newValue, latitude && longitude ? { latitude, longitude } : undefined)}
+        onChange={(_, newValue) =>
+          setFilter(newValue, latitude && longitude ? { latitude, longitude } : undefined, radius)
+        }
         centered
       >
         <Tab label="Recent" value="recent" />

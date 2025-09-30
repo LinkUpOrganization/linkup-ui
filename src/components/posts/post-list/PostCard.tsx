@@ -52,7 +52,7 @@ const PostCard = memo(function PostCard({ post, handleLike }: PostCardProps) {
                     search={{
                       latitude: +post.latitude,
                       longitude: +post.longitude,
-                      radius: 10,
+                      radius: 0.1,
                       filter: "recent",
                     }}
                   >
