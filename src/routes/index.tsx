@@ -48,8 +48,6 @@ export default function PostsListPage() {
     },
   });
 
-  if (isError) return <PostsError />;
-
   return (
     <Box sx={{ minHeight: "100vh", backgroundColor: "background.default" }}>
       <Header currentPage="Home" />
@@ -64,6 +62,8 @@ export default function PostsListPage() {
         <Box sx={{ maxWidth: 600, mx: "auto" }}>
           {isLoading ? (
             <PostsLoading />
+          ) : isError ? (
+            <PostsError />
           ) : posts.length === 0 ? (
             <PostsNotFound />
           ) : (

@@ -68,7 +68,7 @@ function LocationsPage() {
 
   return (
     <Box sx={{ minHeight: "100vh", backgroundColor: "background.default" }}>
-      <Header />
+      <Header currentPage="Locations" />
 
       <Map mapCenter={mapCenter} handleSelect={handleSelectLocation} boxStyles={{ height: 250 }} />
 
@@ -87,6 +87,8 @@ function LocationsPage() {
         <Box sx={{ maxWidth: 600, mx: "auto" }}>
           {isLoading ? (
             <PostsLoading />
+          ) : isError ? (
+            <PostsError />
           ) : posts.length === 0 ? (
             <PostsNotFound />
           ) : (

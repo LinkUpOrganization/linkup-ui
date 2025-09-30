@@ -33,7 +33,10 @@ export default function Header({ currentPage }: HeaderProps) {
     setMobileOpen(!mobileOpen);
   };
 
-  const navItems = [{ label: "Home", href: "/" }];
+  const navItems = [
+    { label: "Home", href: "/" },
+    { label: "Locations", href: "/locations" },
+  ];
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
