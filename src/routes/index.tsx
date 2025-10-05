@@ -1,4 +1,4 @@
-import { Box, Typography, Fab, Tabs, Tab } from "@mui/material";
+import { Box, Typography, Fab } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import { createFileRoute } from "@tanstack/react-router";
 import { useInView } from "react-intersection-observer";
@@ -10,6 +10,7 @@ import PostsError from "@/components/posts/post-list/PostsError";
 import PostsNotFound from "@/components/posts/post-list/PostsNotFound";
 import PostCard from "@/components/posts/post-list/PostCard";
 import { useToggleLike } from "@/hooks/useToggleLike";
+import FilteringTabs from "@/components/posts/post-list/FilteringTabs";
 
 export const Route = createFileRoute("/")({
   component: PostsListPage,
@@ -52,11 +53,7 @@ export default function PostsListPage() {
     <Box sx={{ minHeight: "100vh", backgroundColor: "background.default" }}>
       <Header currentPage="Home" />
 
-      <Tabs sx={{ mt: 2 }} value={filter} onChange={(_, newValue) => setFilter(newValue)} centered>
-        <Tab label="Recent" value="recent" />
-        <Tab label="Top" value="top" />
-        <Tab label="Following" value="following" />
-      </Tabs>
+      <FilteringTabs filter={filter} setFilter={setFilter} />
 
       <Box sx={{ pt: 4, px: { xs: 2, sm: 4 }, pb: 4 }}>
         <Box sx={{ maxWidth: 600, mx: "auto" }}>

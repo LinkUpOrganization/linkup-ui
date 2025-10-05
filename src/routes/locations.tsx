@@ -1,6 +1,7 @@
 import Header from "@/components/auth/Header";
 import Map from "@/components/posts/location/Map";
 import RadiusPickerButton from "@/components/posts/location/RadiusPickerButton";
+import FilteringTabs from "@/components/posts/post-list/FilteringTabs";
 import PostCard from "@/components/posts/post-list/PostCard";
 import PostsError from "@/components/posts/post-list/PostsError";
 import PostsLoading from "@/components/posts/post-list/PostsLoading";
@@ -9,7 +10,7 @@ import { KYIV_COORDINATES } from "@/constants/posts";
 import { usePostList } from "@/hooks/usePostList";
 import { usePostLocation } from "@/hooks/usePostLocation";
 import { useToggleLike } from "@/hooks/useToggleLike";
-import { Box, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { useInView } from "react-intersection-observer";
@@ -62,18 +63,12 @@ function LocationsPage() {
         <RadiusPickerButton radius={radiusValue} handleChangeRadius={handleChangeRadius} />
       </Box>
 
-      <Tabs
-        sx={{ mt: 2 }}
-        value={filter}
-        onChange={(_, newValue) =>
+      <FilteringTabs
+        filter={filter}
+        setFilter={(newValue) =>
           setFilter(newValue, latitude && longitude ? { latitude, longitude } : undefined, radius)
         }
-        centered
-      >
-        <Tab label="Recent" value="recent" />
-        <Tab label="Top" value="top" />
-        <Tab label="Following" value="following" />
-      </Tabs>
+      />
 
       <Box sx={{ pt: 4, px: { xs: 2, sm: 4 }, pb: 4 }}>
         <Box sx={{ maxWidth: 600, mx: "auto" }}>

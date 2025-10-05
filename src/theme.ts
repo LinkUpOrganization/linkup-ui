@@ -134,6 +134,42 @@ const theme = createTheme({
         },
       },
     },
+    MuiTabs: {
+      styleOverrides: {
+        root: {
+          marginTop: "1.5rem",
+          "& .MuiTabs-indicator": {
+            display: "none",
+          },
+        },
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          border: "1px solid #e0e0e0",
+          borderRadius: "20px",
+          marginLeft: "4px",
+          marginRight: "4px",
+          minHeight: "auto",
+          padding: "4px 12px",
+          textTransform: "none",
+          fontWeight: 500,
+          fontSize: "0.9rem",
+          color: "#4a635d",
+          transition: "all 0.2s ease",
+          "&:hover": {
+            borderColor: "#2e7d32",
+            color: "#2e7d32",
+          },
+          "&.Mui-selected": {
+            backgroundColor: "#2e7d32",
+            color: "#fff !important",
+            borderColor: "#2e7d32",
+          },
+        },
+      },
+    },
   },
   shape: {
     borderRadius: 8,
