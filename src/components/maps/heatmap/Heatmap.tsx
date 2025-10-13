@@ -5,12 +5,14 @@ import { useQuery } from "@tanstack/react-query";
 import { getHeatmapPoints } from "@/api/posts";
 import { useMediaQuery, useTheme } from "@mui/material";
 import HeatmapLayer from "./HeatmapLayer";
+import ClusterMarker from "./ClusterMarker";
 
 type HeatMapProps = {
   style?: React.CSSProperties;
+  selectedCluster?: { latitude: number; longitude: number } | null;
 };
 
-export default function Heatmap({ style }: HeatMapProps) {
+export default function Heatmap({ style, selectedCluster }: HeatMapProps) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [bounds, setBounds] = useState<BoundsType | null>(null);
@@ -37,6 +39,7 @@ export default function Heatmap({ style }: HeatMapProps) {
         onBoundsChange={setBounds}
         onZoomChange={setZoom}
       />
+      {selectedCluster && <ClusterMarker coords={selectedCluster} />}
     </MapContainer>
   );
 }

@@ -1,19 +1,11 @@
 import { getPostClusters } from "@/api/posts";
 import Header from "@/components/auth/Header";
 import Heatmap from "@/components/maps/heatmap/Heatmap";
-import {
-  Box,
-  Typography,
-  Paper,
-  List,
-  ListItem,
-  ListItemText,
-  useTheme,
-  useMediaQuery,
-  CircularProgress,
-} from "@mui/material";
+import ClusterItem from "@/components/analytics/ClusterItem";
+import { Box, Typography, List, CircularProgress, useTheme, useMediaQuery } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 
 export const Route = createFileRoute("/analytics")({
   component: Analytics,
@@ -22,11 +14,16 @@ export const Route = createFileRoute("/analytics")({
 function Analytics() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const [selectedCluster, setSelectedCluster] = useState<{ latitude: number; longitude: number } | null>(null);
 
   const { data: clusters, isLoading } = useQuery({
     queryKey: ["clusters"],
     queryFn: getPostClusters,
   });
+
+  const handleClusterClick = (coords: { latitude: number; longitude: number }) => {
+    setSelectedCluster(coords);
+  };
 
   return (
     <Box sx={{ minHeight: "100vh" }}>
@@ -41,6 +38,7 @@ function Analytics() {
             top: isMobile ? 0 : "65px",
             zIndex: 1,
           }}
+          selectedCluster={selectedCluster}
         />
 
         <Box
@@ -58,24 +56,25 @@ function Analytics() {
             Clusters of Posts
           </Typography>
 
-          <List sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-            {isLoading ? (
-              <CircularProgress />
-            ) : !clusters || clusters.length === 0 ? (
-              <Typography>No cluster data available.</Typography>
-            ) : (
-              clusters.map((cluster: any) => (
-                <Paper key={cluster.id} sx={{ mb: 2, p: 2, minWidth: "300px" }}>
-                  <ListItem alignItems="flex-start" disableGutters>
-                    <ListItemText
-                      primary={`${cluster.name} (${cluster.count} posts)`}
-                      secondary={cluster.description}
-                    />
-                  </ListItem>
-                </Paper>
-              ))
-            )}
-          </List>
+          {isLoading ? (
+            <CircularProgress />
+          ) : !clusters || clusters.length === 0 ? (
+            <Typography>No cluster data available.</Typography>
+          ) : (
+            <List
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+              }}
+            >
+              {clusters.map((cluster) => (
+                <ClusterItem key={cluster.id} cluster={cluster} onClick={handleClusterClick} />
+              ))}
+            </List>
+          )}
         </Box>
       </Box>
     </Box>
