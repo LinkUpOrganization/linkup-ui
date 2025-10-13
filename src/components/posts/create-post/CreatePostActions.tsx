@@ -18,12 +18,12 @@ export default function CreatePostActions({ isPending, handleImageSelect, select
       sx={{
         display: "flex",
         justifyContent: "space-between",
-        alignItems: "center",
+        flexDirection: { xs: "column", sm: "row" },
+        gap: 2,
       }}
     >
       <SelectImagesInput selectedImagesCount={selectedImages.length} handleImageSelect={handleImageSelect} />
-
-      <Box sx={{ display: "flex", gap: 2 }}>
+      <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
         <Button
           variant="outlined"
           onClick={() => navigate({ to: "/", search: { filter: "recent" } })}
