@@ -6,7 +6,8 @@ import PostCard from "@/components/posts/post-list/PostCard";
 import PostsError from "@/components/posts/post-list/PostsError";
 import PostsLoading from "@/components/posts/post-list/PostsLoading";
 import PostsNotFound from "@/components/posts/post-list/PostsNotFound";
-import { KYIV_COORDINATES } from "@/constants/posts";
+import SelectLocationPrompt from "@/components/posts/post-list/SelectLocationPrompt";
+import { DEFAULT_ZOOM, SMALL_ZOOM } from "@/constants/posts";
 import { usePostList } from "@/hooks/usePostList";
 import { usePostLocation } from "@/hooks/usePostLocation";
 import { useToggleLike } from "@/hooks/useToggleLike";
@@ -31,15 +32,16 @@ function LocationsPage() {
   const { filter, latitude, longitude, radius, radiusValue, setFilter, handleSelectLocation, handleChangeRadius } =
     usePostLocation();
 
-  const mapCenter: [number, number] = latitude && longitude ? [latitude, longitude] : KYIV_COORDINATES;
+  const mapCenter: [number, number] | undefined = latitude && longitude ? [latitude, longitude] : undefined;
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError } = usePostList(
     filter,
-    mapCenter[0],
-    mapCenter[1],
-    radius
+    latitude,
+    longitude,
+    radius,
+    !!mapCenter
   );
-  const { handleLike } = useToggleLike(filter, mapCenter[0], mapCenter[1], radius);
+  const { handleLike } = useToggleLike(filter, latitude, longitude, radius);
 
   const posts = useMemo(() => data?.pages.flatMap((page) => page.items) ?? [], [data]);
 
@@ -59,7 +61,12 @@ function LocationsPage() {
       <Header currentPage="Locations" />
 
       <Box sx={{ position: "relative" }}>
-        <Map mapCenter={mapCenter} handleSelect={handleSelectLocation} boxStyles={{ height: 250 }} />
+        <Map
+          mapCenter={mapCenter}
+          handleSelect={handleSelectLocation}
+          zoom={mapCenter ? DEFAULT_ZOOM : SMALL_ZOOM}
+          boxStyles={{ height: 300 }}
+        />
         <RadiusPickerButton radius={radiusValue} handleChangeRadius={handleChangeRadius} />
       </Box>
 
@@ -72,7 +79,9 @@ function LocationsPage() {
 
       <Box sx={{ pt: 4, px: { xs: 2, sm: 4 }, pb: 4 }}>
         <Box sx={{ maxWidth: 600, mx: "auto" }}>
-          {isLoading ? (
+          {!latitude || !longitude ? (
+            <SelectLocationPrompt />
+          ) : isLoading ? (
             <PostsLoading />
           ) : isError ? (
             <PostsError />

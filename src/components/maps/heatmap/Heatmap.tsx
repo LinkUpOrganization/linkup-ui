@@ -6,6 +6,7 @@ import { getHeatmapPoints } from "@/api/posts";
 import { useMediaQuery, useTheme } from "@mui/material";
 import HeatmapLayer from "./HeatmapLayer";
 import ClusterMarker from "./ClusterMarker";
+import { HEATMAP_DEFAULT_COORDINATES, HEATMAP_ZOOM } from "@/constants/posts";
 
 type HeatMapProps = {
   style?: React.CSSProperties;
@@ -16,7 +17,7 @@ export default function Heatmap({ style, selectedCluster }: HeatMapProps) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [bounds, setBounds] = useState<BoundsType | null>(null);
-  const [zoom, setZoom] = useState<number>(3);
+  const [zoom, setZoom] = useState<number>(HEATMAP_ZOOM);
 
   const { data: heatmapPoints } = useQuery({
     queryKey: ["heatmap", bounds, zoom],
@@ -27,7 +28,7 @@ export default function Heatmap({ style, selectedCluster }: HeatMapProps) {
   return (
     <MapContainer
       key={isMobile ? "mobile" : "desktop"}
-      center={[50, 10]}
+      center={HEATMAP_DEFAULT_COORDINATES}
       zoom={zoom}
       worldCopyJump={true}
       style={{ outline: "none", ...style }}

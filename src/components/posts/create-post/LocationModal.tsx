@@ -2,7 +2,7 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } 
 import { useState } from "react";
 import { reverseGeocode } from "@/api/posts";
 import Map from "../location/Map";
-import { KYIV_COORDINATES } from "@/constants/posts";
+import { SMALL_ZOOM } from "@/constants/posts";
 
 type LocationModalProps = {
   open: boolean;
@@ -14,11 +14,11 @@ type LocationModalProps = {
 export default function LocationModal({ open, onClose, onSave, intialLocation }: LocationModalProps) {
   const [coordinates, setCoordinates] = useState<LocationCoordinates | null>(null);
   const [address, setAddress] = useState(intialLocation?.address ?? "");
-  const mapCenter: [number, number] = coordinates
+  const mapCenter: [number, number] | undefined = coordinates
     ? [coordinates.latitude, coordinates.longitude]
     : intialLocation
       ? [intialLocation.latitude, intialLocation.longitude]
-      : KYIV_COORDINATES;
+      : undefined;
 
   const handleSelect = async (coordinates: LocationCoordinates) => {
     setCoordinates(coordinates);
@@ -35,7 +35,7 @@ export default function LocationModal({ open, onClose, onSave, intialLocation }:
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle>Select Location</DialogTitle>
       <DialogContent>
-        <Map handleSelect={handleSelect} mapCenter={mapCenter} />
+        <Map handleSelect={handleSelect} mapCenter={mapCenter} zoom={SMALL_ZOOM} />
 
         <TextField fullWidth label="Address" value={address} onChange={(e) => setAddress(e.target.value)} />
       </DialogContent>

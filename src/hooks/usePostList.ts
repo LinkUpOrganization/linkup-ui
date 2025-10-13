@@ -11,6 +11,7 @@ export function usePostList(
   latitude?: number,
   longitude?: number,
   radius?: number,
+  enabled = true,
   pageSize = 10
 ) {
   const infiniteQuery = useInfiniteQuery<
@@ -50,6 +51,7 @@ export function usePostList(
       }),
     getNextPageParam: (lastPage) => lastPage.nextCursor ?? null,
     initialPageParam: null,
+    enabled: enabled,
   });
 
   return { ...infiniteQuery };

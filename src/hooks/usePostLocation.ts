@@ -29,7 +29,7 @@ export function usePostLocation() {
   );
 
   const radiusOptions: number[] = [0.1, 1, 5, 10, 20];
-  const radiusValue: number = radius ?? radiusOptions[0];
+  const radiusValue: number = radius ?? radiusOptions[4];
 
   const handleChangeRadius = useCallback(() => {
     const currentIndex = radiusOptions.indexOf(radius ?? radiusOptions[0]);
