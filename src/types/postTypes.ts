@@ -52,3 +52,11 @@ type BoundsType = {
 type HeatmapParams = BoundsType & {
   zoom: number;
 };
+
+type ClusterType = {
+  id: number;
+  name: string;
+  latitude: number;
+  longitude: number;
+  count: number;
+};

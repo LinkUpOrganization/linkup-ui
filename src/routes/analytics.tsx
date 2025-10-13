@@ -1,33 +1,32 @@
+import { getPostClusters } from "@/api/posts";
 import Header from "@/components/auth/Header";
 import Heatmap from "@/components/maps/heatmap/Heatmap";
-import { Box, Typography, Paper, List, ListItem, ListItemText, useTheme, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Paper,
+  List,
+  ListItem,
+  ListItemText,
+  useTheme,
+  useMediaQuery,
+  CircularProgress,
+} from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
-
-const mockClusters = [
-  { id: 1, title: "Cluster 1: Tech Posts", count: 25, description: "Posts about technology and gadgets." },
-  { id: 2, title: "Cluster 2: Travel", count: 15, description: "Posts about travel experiences and locations." },
-  { id: 3, title: "Cluster 3: Food", count: 30, description: "Posts related to food recipes and restaurants." },
-  { id: 4, title: "Cluster 3: Food", count: 30, description: "Posts related to food recipes and restaurants." },
-  { id: 5, title: "Cluster 3: Food", count: 30, description: "Posts related to food recipes and restaurants." },
-  { id: 6, title: "Cluster 3: Food", count: 30, description: "Posts related to food recipes and restaurants." },
-  { id: 7, title: "Cluster 3: Food", count: 30, description: "Posts related to food recipes and restaurants." },
-  { id: 8, title: "Cluster 3: Food", count: 30, description: "Posts related to food recipes and restaurants." },
-];
 
 export const Route = createFileRoute("/analytics")({
   component: Analytics,
 });
 
 function Analytics() {
-  const [clusters, setClusters] = useState<any>([]);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  // Імітація завантаження кластерів (можна замінити на API виклик)
-  useEffect(() => {
-    setClusters(mockClusters);
-  }, []);
+  const { data: clusters, isLoading } = useQuery({
+    queryKey: ["clusters"],
+    queryFn: getPostClusters,
+  });
 
   return (
     <Box sx={{ minHeight: "100vh" }}>
@@ -44,27 +43,39 @@ function Analytics() {
           }}
         />
 
-        <Box sx={{ mt: 2, maxWidth: 800, mx: "auto", p: 2 }}>
+        <Box
+          sx={{
+            mt: 2,
+            maxWidth: 800,
+            p: 2,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            flexGrow: 1,
+          }}
+        >
           <Typography variant="h6" gutterBottom>
             Clusters of Posts
           </Typography>
 
-          {clusters.length === 0 ? (
-            <Typography>No cluster data available.</Typography>
-          ) : (
-            <List>
-              {clusters.map((cluster: any) => (
-                <Paper key={cluster.id} sx={{ mb: 2, p: 2 }}>
+          <List sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+            {isLoading ? (
+              <CircularProgress />
+            ) : !clusters || clusters.length === 0 ? (
+              <Typography>No cluster data available.</Typography>
+            ) : (
+              clusters.map((cluster: any) => (
+                <Paper key={cluster.id} sx={{ mb: 2, p: 2, minWidth: "300px" }}>
                   <ListItem alignItems="flex-start" disableGutters>
                     <ListItemText
-                      primary={`${cluster.title} (${cluster.count} posts)`}
+                      primary={`${cluster.name} (${cluster.count} posts)`}
                       secondary={cluster.description}
                     />
                   </ListItem>
                 </Paper>
-              ))}
-            </List>
-          )}
+              ))
+            )}
+          </List>
         </Box>
       </Box>
     </Box>
