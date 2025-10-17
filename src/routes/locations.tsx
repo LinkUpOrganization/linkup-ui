@@ -10,7 +10,7 @@ import SelectLocationPrompt from "@/components/posts/post-list/SelectLocationPro
 import { DEFAULT_ZOOM, SMALL_ZOOM } from "@/constants/posts";
 import { usePostList } from "@/hooks/usePostList";
 import { usePostLocation } from "@/hooks/usePostLocation";
-import { useToggleLike } from "@/hooks/useToggleLike";
+import { usePostListToggleLike } from "@/hooks/usePostListToggleLike";
 import { Box, Typography } from "@mui/material";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
@@ -41,7 +41,7 @@ function LocationsPage() {
     radius,
     !!mapCenter
   );
-  const { handleLike } = useToggleLike(filter, latitude, longitude, radius);
+  const { handleLike } = usePostListToggleLike(filter, latitude, longitude, radius);
 
   const posts = useMemo(() => data?.pages.flatMap((page) => page.items) ?? [], [data]);
 

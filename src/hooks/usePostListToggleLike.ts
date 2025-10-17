@@ -3,7 +3,7 @@ import { toggleLike } from "../api/posts";
 import type { PagedResult } from "./usePostList";
 import { useCallback } from "react";
 
-export function useToggleLike(
+export function usePostListToggleLike(
   filter: PostFilterType,
   latitude?: number,
   longitude?: number,

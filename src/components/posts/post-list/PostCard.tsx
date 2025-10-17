@@ -1,5 +1,5 @@
 import UserAvatar from "@/components/auth/UserAvatar";
-import { Favorite, Comment, FavoriteBorder, Share } from "@mui/icons-material";
+import { Favorite, Comment, FavoriteBorder } from "@mui/icons-material";
 import { Card, CardContent, Box, Typography, IconButton } from "@mui/material";
 import { formatDistanceToNow } from "date-fns";
 import PostPhotos from "./PostPhotos";
@@ -88,16 +88,14 @@ const PostCard = memo(function PostCard({ post, handleLike }: PostCardProps) {
             {post.likesCount || 0}
           </Typography>
 
-          <IconButton color="default" size="small">
-            <Comment fontSize="small" />
-          </IconButton>
-          <Typography variant="caption" color="text.secondary">
-            {post.commentsCount || 0}
-          </Typography>
-
-          <IconButton color="default" size="small">
-            <Share fontSize="small" />
-          </IconButton>
+          <Link to="/posts/$postId" params={{ postId: post.id }}>
+            <IconButton color="default" size="small">
+              <Comment fontSize="small" />
+            </IconButton>
+            <Typography variant="caption" color="text.secondary">
+              {post.commentsCount || 0}
+            </Typography>
+          </Link>
         </Box>
       </CardContent>
     </Card>

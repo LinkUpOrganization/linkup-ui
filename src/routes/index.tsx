@@ -9,7 +9,7 @@ import PostsLoading from "@/components/posts/post-list/PostsLoading";
 import PostsError from "@/components/posts/post-list/PostsError";
 import PostsNotFound from "@/components/posts/post-list/PostsNotFound";
 import PostCard from "@/components/posts/post-list/PostCard";
-import { useToggleLike } from "@/hooks/useToggleLike";
+import { usePostListToggleLike } from "@/hooks/usePostListToggleLike";
 import FilteringTabs from "@/components/posts/post-list/FilteringTabs";
 
 export const Route = createFileRoute("/")({
@@ -36,7 +36,7 @@ export default function PostsListPage() {
   };
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError } = usePostList(filter);
-  const { handleLike } = useToggleLike(filter);
+  const { handleLike } = usePostListToggleLike(filter);
 
   const posts = useMemo(() => data?.pages.flatMap((page) => page.items) ?? [], [data]);
 

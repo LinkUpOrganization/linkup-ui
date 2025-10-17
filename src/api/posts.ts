@@ -76,7 +76,7 @@ export async function toggleLike(postId: string, isLiked: boolean): Promise<void
   });
 }
 
-export const getPostById = async (postId: string): Promise<Post> => {
+export const getPostById = async ({ postId }: { postId: string }): Promise<Post> => {
   const response = await apiClient.get(`/posts/${postId}`);
   return response.data;
 };
