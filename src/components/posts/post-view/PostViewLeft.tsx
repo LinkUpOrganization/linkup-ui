@@ -21,7 +21,6 @@ export default function PostViewLeft({
         borderColor: "divider",
         position: { md: "sticky" },
         top: { md: 65 },
-        alignSelf: "flex-start",
         height: { md: "calc(100vh - 65px)" },
         overflowY: { md: "auto" },
         zIndex: 1,
