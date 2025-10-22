@@ -1,5 +1,6 @@
 import { Box, TextField, Button } from "@mui/material";
 import UserAvatar from "@/components/auth/UserAvatar";
+import { Link } from "@tanstack/react-router";
 
 export default function CommentInput({ user, newComment, setNewComment, onSend, disabled }: any) {
   return (
@@ -14,7 +15,9 @@ export default function CommentInput({ user, newComment, setNewComment, onSend, 
         py: 3,
       }}
     >
-      <UserAvatar id={user.id} size={36} displayName={user.displayName} />
+      <Link to="/profile">
+        <UserAvatar id={user.id} size={32} displayName={user.displayName} />
+      </Link>
       <TextField
         value={newComment}
         onChange={(e) => setNewComment(e.target.value)}

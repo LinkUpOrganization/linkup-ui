@@ -4,7 +4,7 @@ import UserAvatar from "@/components/auth/UserAvatar";
 import CommentInput from "./CommentInput";
 import { useAuth } from "@/contexts/AuthProvider";
 import usePostComments from "@/hooks/usePostComments";
-import { useParams } from "@tanstack/react-router";
+import { Link, useParams } from "@tanstack/react-router";
 
 export default function PostCommentsSection() {
   const { user } = useAuth();
@@ -36,7 +36,7 @@ export default function PostCommentsSection() {
           <CircularProgress size={24} />
         </Box>
       ) : !comments?.length ? (
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body1" color="text.secondary" textAlign="center">
           Be first to comment the post!
         </Typography>
       ) : (
@@ -52,16 +52,46 @@ export default function PostCommentsSection() {
             }}
           >
             <CardContent sx={{ display: "flex", gap: 1.5, p: 1.5 }}>
-              <UserAvatar id={comment.author.id} size={36} displayName={comment.author.displayName} />
+              <Link
+                to={user?.id === comment.author.id ? "/profile" : "/users/$userId"}
+                params={user?.id === comment.author.id ? undefined : { userId: comment.author.id }}
+              >
+                <UserAvatar id={comment.author.id} size={32} displayName={comment.author.displayName} />
+              </Link>
               <Box sx={{ flex: 1, minWidth: 0 }}>
-                <Typography variant="subtitle2" fontWeight={600}>
-                  {comment.author.displayName}
-                </Typography>
+                <Box>
+                  <Link
+                    to={user?.id === comment.author.id ? "/profile" : "/users/$userId"}
+                    params={user?.id === comment.author.id ? undefined : { userId: comment.author.id }}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <Typography
+                      component="span"
+                      variant="subtitle2"
+                      fontWeight={600}
+                      sx={{
+                        mr: 0.5,
+                      }}
+                      noWrap
+                    >
+                      {comment.author.displayName}
+                    </Typography>
+                  </Link>
+
+                  <Typography
+                    component="span"
+                    sx={{
+                      fontSize: "14px",
+                      lineHeight: 1.4,
+                      wordBreak: "break-word",
+                    }}
+                  >
+                    {comment.content}
+                  </Typography>
+                </Box>
+
                 <Typography variant="caption" color="text.secondary" sx={{ display: "block", mb: 0.5 }}>
                   {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
-                </Typography>
-                <Typography variant="body2" sx={{ lineHeight: 1.4 }}>
-                  {comment.content}
                 </Typography>
               </Box>
             </CardContent>

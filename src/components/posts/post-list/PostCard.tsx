@@ -26,7 +26,7 @@ const PostCard = memo(function PostCard({ post, handleLike, sx }: PostCardProps)
           >
             <UserAvatar
               id={post.author.id ?? "unknown"}
-              size={40}
+              size={36}
               displayName={post.author?.displayName ?? "Unknown User"}
             />
           </Link>
