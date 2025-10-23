@@ -28,7 +28,7 @@ export default function EditPostPage() {
     isError: isPostError,
   } = useQuery({
     queryKey: ["posts", postId],
-    queryFn: () => getPostById(postId),
+    queryFn: () => getPostById({ postId }),
     enabled: !!postId,
   });
 
