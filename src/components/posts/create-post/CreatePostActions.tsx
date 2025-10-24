@@ -26,7 +26,7 @@ export default function CreatePostActions({ isPending, handleImageSelect, select
       <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
         <Button
           variant="outlined"
-          onClick={() => navigate({ to: "/", search: { filter: "recent" } })}
+          onClick={() => navigate({ to: "/", search: { sort: "recent" } })}
           disabled={isPending}
         >
           Cancel

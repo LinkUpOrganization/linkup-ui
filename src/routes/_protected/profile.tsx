@@ -31,7 +31,7 @@ function ProfilePage() {
     mutationFn: logout,
     onSuccess: () => {
       setToken(null);
-      navigate({ to: "/", search: { filter: "recent" } });
+      navigate({ to: "/", search: { sort: "recent" } });
     },
     onError: (error: any) => {
       console.log(error);

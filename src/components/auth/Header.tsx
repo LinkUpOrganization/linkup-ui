@@ -79,7 +79,7 @@ export default function Header({ currentPage }: HeaderProps) {
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Link
               to={"/"}
-              search={{ filter: "recent" }}
+              search={{ sort: "recent" }}
               style={{
                 display: "flex",
                 alignItems: "center",

@@ -51,7 +51,7 @@ export default function useEditPost({ postId, initialPost }: UseEditPostProps) {
   } = useMutation({
     mutationFn: updatePost,
     onSuccess: () => {
-      navigate({ to: "/", search: { filter: "recent" } });
+      navigate({ to: "/", search: { sort: "recent" } });
     },
     onError: (error: any) => {
       console.error("Failed to update post:", error);
@@ -129,7 +129,7 @@ export default function useEditPost({ postId, initialPost }: UseEditPostProps) {
       return deletePostById(initialPost.id);
     },
     onSuccess: () => {
-      navigate({ to: "/", search: { filter: "recent" } });
+      navigate({ to: "/", search: { sort: "recent" } });
     },
     onError: (error: any) => {
       console.error("Failed to delete post:", error);

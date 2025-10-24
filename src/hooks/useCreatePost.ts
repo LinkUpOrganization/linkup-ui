@@ -20,7 +20,7 @@ export default function useCreatePost() {
   } = useMutation({
     mutationFn: createPost,
     onSuccess: () => {
-      navigate({ to: "/", search: { filter: "recent" } });
+      navigate({ to: "/", search: { sort: "recent" } });
     },
     onError: (error: any) => {
       console.error("Failed to create post:", error);

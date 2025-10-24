@@ -4,7 +4,7 @@ import type { PagedResult } from "./usePostList";
 import { useCallback } from "react";
 
 export function usePostListToggleLike(
-  filter: PostFilterType,
+  sort: PostSortType,
   latitude?: number,
   longitude?: number,
   radius?: number,
@@ -25,7 +25,7 @@ export function usePostListToggleLike(
         [
           "posts",
           {
-            filter,
+            sort,
             pageSize,
             ...(latitude !== undefined && { latitude }),
             ...(longitude !== undefined && { longitude }),

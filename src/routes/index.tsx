@@ -16,27 +16,27 @@ export const Route = createFileRoute("/")({
   component: PostsListPage,
   validateSearch: (search: Record<string, unknown>) => {
     return {
-      filter: (search.filter as PostFilterType) ?? "recent",
+      sort: (search.sort as PostSortType) ?? "recent",
     };
   },
 });
 
 export default function PostsListPage() {
   const navigate = Route.useNavigate();
-  const { filter } = Route.useSearch();
+  const { sort } = Route.useSearch();
 
-  const setFilter = (newFilter: PostFilterType) => {
+  const setFilter = (newFilter: PostSortType) => {
     navigate({
       search: (prev) => ({
         ...prev,
-        filter: newFilter,
+        sort: newFilter,
       }),
       replace: true,
     });
   };
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError } = usePostList(filter);
-  const { handleLike } = usePostListToggleLike(filter);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError } = usePostList(sort);
+  const { handleLike } = usePostListToggleLike(sort);
 
   const posts = useMemo(() => data?.pages.flatMap((page) => page.items) ?? [], [data]);
 
@@ -53,7 +53,7 @@ export default function PostsListPage() {
     <Box sx={{ minHeight: "100vh", backgroundColor: "background.default" }}>
       <Header currentPage="Home" />
 
-      <FilteringTabs filter={filter} setFilter={setFilter} />
+      <FilteringTabs sort={sort} setFilter={setFilter} />
 
       <Box sx={{ pt: 4, px: { xs: 2, sm: 4 }, pb: 4 }}>
         <Box sx={{ maxWidth: 600, mx: "auto" }}>

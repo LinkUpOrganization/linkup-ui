@@ -3,14 +3,14 @@ import { useCallback } from "react";
 
 export function usePostLocation() {
   const navigate = Route.useNavigate();
-  const { filter, latitude, longitude, radius } = Route.useSearch();
+  const { sort, latitude, longitude, radius } = Route.useSearch();
 
   const setFilter = useCallback(
-    (newFilter: PostFilterType, coordinates?: LocationCoordinates, newRadius?: number) => {
+    (newFilter: PostSortType, coordinates?: LocationCoordinates, newRadius?: number) => {
       navigate({
         search: (prev) => ({
           ...prev,
-          filter: newFilter,
+          sort: newFilter,
           latitude: coordinates?.latitude,
           longitude: coordinates?.longitude,
           radius: newRadius ?? prev.radius,
@@ -23,9 +23,9 @@ export function usePostLocation() {
 
   const handleSelectLocation = useCallback(
     async (coordinates: LocationCoordinates) => {
-      setFilter(filter, { latitude: coordinates.latitude, longitude: coordinates.longitude }, radius);
+      setFilter(sort, { latitude: coordinates.latitude, longitude: coordinates.longitude }, radius);
     },
-    [filter, radius, setFilter]
+    [sort, radius, setFilter]
   );
 
   const radiusOptions: number[] = [0.1, 1, 5, 10, 20];
@@ -35,11 +35,11 @@ export function usePostLocation() {
     const currentIndex = radiusOptions.indexOf(radius ?? radiusOptions[0]);
     const nextIndex = (currentIndex + 1) % radiusOptions.length;
     const newRadius = radiusOptions[nextIndex];
-    setFilter(filter, latitude && longitude ? { latitude, longitude } : undefined, newRadius);
-  }, [radius, filter, latitude, longitude, setFilter]);
+    setFilter(sort, latitude && longitude ? { latitude, longitude } : undefined, newRadius);
+  }, [radius, sort, latitude, longitude, setFilter]);
 
   return {
-    filter,
+    sort,
     latitude,
     longitude,
     radius,

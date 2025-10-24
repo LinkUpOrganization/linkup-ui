@@ -19,7 +19,7 @@ import { useInView } from "react-intersection-observer";
 export const Route = createFileRoute("/locations")({
   validateSearch: (search: Record<string, unknown>) => {
     return {
-      filter: (search.filter as PostFilterType) ?? "recent",
+      sort: (search.sort as PostSortType) ?? "recent",
       latitude: search.latitude ? Number(search.latitude) : undefined,
       longitude: search.longitude ? Number(search.longitude) : undefined,
       radius: search.radius ? Number(search.radius) : undefined,
@@ -29,19 +29,19 @@ export const Route = createFileRoute("/locations")({
 });
 
 function LocationsPage() {
-  const { filter, latitude, longitude, radius, radiusValue, setFilter, handleSelectLocation, handleChangeRadius } =
+  const { sort, latitude, longitude, radius, radiusValue, setFilter, handleSelectLocation, handleChangeRadius } =
     usePostLocation();
 
   const mapCenter: [number, number] | undefined = latitude && longitude ? [latitude, longitude] : undefined;
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError } = usePostList(
-    filter,
+    sort,
     latitude,
     longitude,
     radius,
     !!mapCenter
   );
-  const { handleLike } = usePostListToggleLike(filter, latitude, longitude, radius);
+  const { handleLike } = usePostListToggleLike(sort, latitude, longitude, radius);
 
   const posts = useMemo(() => data?.pages.flatMap((page) => page.items) ?? [], [data]);
 
@@ -71,7 +71,7 @@ function LocationsPage() {
       </Box>
 
       <FilteringTabs
-        filter={filter}
+        sort={sort}
         setFilter={(newValue) =>
           setFilter(newValue, latitude && longitude ? { latitude, longitude } : undefined, radius)
         }

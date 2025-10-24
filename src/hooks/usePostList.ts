@@ -7,7 +7,7 @@ export type PagedResult<T> = {
 };
 
 export function usePostList(
-  filter: PostFilterType,
+  sort: PostSortType,
   latitude?: number,
   longitude?: number,
   radius?: number,
@@ -21,7 +21,7 @@ export function usePostList(
     [
       string,
       {
-        filter: PostFilterType;
+        sort: PostSortType;
         pageSize: number;
         latitude?: number;
         longitude?: number;
@@ -33,7 +33,7 @@ export function usePostList(
     queryKey: [
       "posts",
       {
-        filter,
+        sort,
         pageSize,
         ...(latitude !== undefined && { latitude }),
         ...(longitude !== undefined && { longitude }),
@@ -42,7 +42,7 @@ export function usePostList(
     ],
     queryFn: ({ pageParam }) =>
       fetchPosts({
-        filter,
+        sort,
         cursor: pageParam,
         pageSize,
         latitude,

@@ -13,7 +13,7 @@ export async function updatePost({ postId, data }: { postId: string; data: FormD
 }
 
 export const fetchPosts = async ({
-  filter,
+  sort,
   cursor,
   latitude,
   longitude,
@@ -22,7 +22,7 @@ export const fetchPosts = async ({
 }: FetchPostsProps): Promise<PagedResult<Post>> => {
   const response = await apiClient.get("/posts", {
     params: {
-      filter,
+      sort,
       cursor,
       latitude,
       longitude,

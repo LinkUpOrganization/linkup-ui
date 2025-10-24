@@ -46,7 +46,7 @@ export default function EditPostActions({
         </Button>
         <Button
           variant="outlined"
-          onClick={() => navigate({ to: "/", search: { filter: "recent" } })}
+          onClick={() => navigate({ to: "/", search: { sort: "recent" } })}
           disabled={isEditPending || isDeletePending}
         >
           Cancel
