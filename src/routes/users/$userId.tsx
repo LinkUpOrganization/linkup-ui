@@ -1,13 +1,12 @@
 import Header from "@/components/auth/Header";
-import UserAvatar from "@/components/auth/UserAvatar";
-import { Box, Button, Card, CardContent, Typography, Divider, CircularProgress, Alert } from "@mui/material";
+import { Box, Card, CardContent, Typography, Divider, CircularProgress, Alert } from "@mui/material";
 import { createFileRoute, useParams } from "@tanstack/react-router";
-import VerifiedIcon from "@mui/icons-material/Verified";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import { getUserById } from "@/api/users";
 import { useQuery } from "@tanstack/react-query";
 import useToggleFollow from "@/hooks/useToggleFollow";
+import FollowersInfo from "@/components/profile/FollowersInfo";
+import ProfileHeader from "@/components/profile/ProfileHeader";
+import FollowButton from "@/components/profile/FollowButton";
 
 export const Route = createFileRoute("/users/$userId")({
   component: UserPage,
@@ -66,70 +65,17 @@ function UserPage() {
                 mb: 3,
               }}
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 2,
-                  mb: { xs: 2, sm: 0 },
-                  flexDirection: {
-                    xs: "column",
-                    sm: "row",
-                  },
-                  textAlign: { xs: "center", sm: "left" },
-                }}
-              >
-                <UserAvatar id={user.id} displayName={user.displayName} size={64} />
-                <Box>
-                  <Box display="flex" alignItems="center" gap={1} justifyContent={{ xs: "center", sm: "flex-start" }}>
-                    <Typography variant="h5" fontWeight="bold">
-                      {user.displayName}
-                    </Typography>
-                    {user.isVerified && <VerifiedIcon color="primary" fontSize="small" />}
-                  </Box>
-                  <Typography variant="body2" color="text.secondary">
-                    {user.email}
-                  </Typography>
-                </Box>
-              </Box>
-
-              <Button
-                variant={user.isFollowing ? "outlined" : "contained"}
-                startIcon={user.isFollowing ? <PersonRemoveIcon /> : <PersonAddIcon />}
-                onClick={handleFollowToggle}
-                disabled={isToggleFollowPending}
-                sx={{
-                  minWidth: 120,
-                  borderRadius: 2,
-                  textTransform: "none",
-                  fontWeight: "bold",
-                }}
-              >
-                {user.isFollowing ? "Unfollow" : "Follow"}
-              </Button>
+              <ProfileHeader user={user} />
+              <FollowButton
+                user={user}
+                handleFollowToggle={handleFollowToggle}
+                isToggleFollowPending={isToggleFollowPending}
+              />
             </Box>
 
             <Divider sx={{ my: 2 }} />
 
-            <Box sx={{ display: "flex", gap: 3, justifyContent: "center", mb: 2 }}>
-              <Box sx={{ textAlign: "center" }}>
-                <Typography variant="h6" fontWeight="bold">
-                  {user.followersCount ?? 0}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Followers
-                </Typography>
-              </Box>
-
-              <Box sx={{ textAlign: "center" }}>
-                <Typography variant="h6" fontWeight="bold">
-                  {user.followingCount ?? 0}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Following
-                </Typography>
-              </Box>
-            </Box>
+            <FollowersInfo followersCount={user.followersCount} followingCount={user.followingCount} />
           </CardContent>
         </Card>
       </Box>
