@@ -111,3 +111,10 @@ export const getPostClusters = async (): Promise<ClusterType[]> => {
   const response = await apiClient.get("/posts/clusters");
   return response.data;
 };
+
+export const getUserPostLocations = async (userId: string): Promise<LocationCoordinates[]> => {
+  const response = await apiClient.get("/posts/post-locations", {
+    params: { userId },
+  });
+  return response.data;
+};

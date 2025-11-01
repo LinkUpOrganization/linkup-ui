@@ -1,5 +1,5 @@
 import Header from "@/components/auth/Header";
-import { Box, Typography, Tabs, Tab } from "@mui/material";
+import { Box, Tabs, Tab } from "@mui/material";
 import { createFileRoute, useParams } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -8,6 +8,7 @@ import UserNotFoundState from "@/components/profile/UserNotFoundState";
 import UserLoadingState from "@/components/profile/UserLoadingState";
 import UserProfileCard from "@/components/profile/UserProfileCard";
 import UserPostsSection from "@/components/profile/UserPostsSection";
+import UserPostLocations from "@/components/maps/routemap/UserPostLocations";
 
 export const Route = createFileRoute("/users/$userId")({
   component: UserPage,
@@ -47,7 +48,7 @@ function UserPage() {
         </Tabs>
 
         {activeTab === "posts" && <UserPostsSection userId={user.id} />}
-        {activeTab === "map" && <Typography sx={{ mt: 4, color: "text.secondary" }}>Map coming soon...</Typography>}
+        {activeTab === "map" && <UserPostLocations userId={user.id} />}
       </Box>
     </Box>
   );
