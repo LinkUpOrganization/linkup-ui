@@ -77,29 +77,27 @@ function LocationsPage() {
         }
       />
 
-      <Box sx={{ pt: 4, px: { xs: 2, sm: 4 }, pb: 4 }}>
-        <Box sx={{ maxWidth: 600, mx: "auto" }}>
-          {!latitude || !longitude ? (
-            <SelectLocationPrompt />
-          ) : isLoading ? (
-            <PostsLoading />
-          ) : isError ? (
-            <PostsError />
-          ) : posts.length === 0 ? (
-            <PostsNotFound />
-          ) : (
-            posts.map((post) => <PostCard key={post.id} post={post} handleLike={handleLike} />)
-          )}
+      <Box sx={{ width: "100%", maxWidth: 700, px: { xs: 2, sm: 4 }, pb: 4, pt: 4, mx: "auto" }}>
+        {!latitude || !longitude ? (
+          <SelectLocationPrompt />
+        ) : isLoading ? (
+          <PostsLoading />
+        ) : isError ? (
+          <PostsError />
+        ) : posts.length === 0 ? (
+          <PostsNotFound />
+        ) : (
+          posts.map((post) => <PostCard key={post.id} post={post} handleLike={handleLike} />)
+        )}
 
-          {/* Sentinel for IntersectionObserver */}
-          {hasNextPage && <div ref={loadMoreRef} style={{ height: 1 }} />}
+        {/* Sentinel for IntersectionObserver */}
+        {hasNextPage && <div ref={loadMoreRef} style={{ height: 1 }} />}
 
-          {isFetchingNextPage && (
-            <Typography variant="body2" color="text.secondary" sx={{ textAlign: "center", mt: 2 }}>
-              Loading more posts...
-            </Typography>
-          )}
-        </Box>
+        {isFetchingNextPage && (
+          <Typography variant="body2" color="text.secondary" sx={{ textAlign: "center", mt: 2 }}>
+            Loading more posts...
+          </Typography>
+        )}
       </Box>
     </Box>
   );

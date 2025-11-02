@@ -8,7 +8,7 @@ export default function UserProfileCard({ user }: { user: any }) {
   const { handleFollowToggle, isToggleFollowPending, isToggleFollowError, toggleFollowError } = useToggleFollow(user);
 
   return (
-    <Box sx={{ width: "100%", maxWidth: 600 }}>
+    <Box sx={{ width: "100%", maxWidth: 700, px: { xs: 2, sm: 4 } }}>
       {isToggleFollowError && (
         <Alert severity="error" sx={{ mb: 2 }}>
           {toggleFollowError?.message ?? "Failed to toggle follow state"}
