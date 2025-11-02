@@ -4,9 +4,9 @@ import { createFileRoute, useParams } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getUserById } from "@/api/users";
-import UserNotFoundState from "@/components/profile/UserNotFoundState";
-import UserLoadingState from "@/components/profile/UserLoadingState";
-import UserProfileCard from "@/components/profile/UserProfileCard";
+import UserNotFoundState from "@/components/user/UserNotFoundState";
+import UserLoadingState from "@/components/user/UserLoadingState";
+import UserProfileCard from "@/components/user/UserProfileCard";
 import UserPostsSection from "@/components/profile/UserPostsSection";
 import UserPostLocations from "@/components/maps/routemap/UserPostLocations";
 

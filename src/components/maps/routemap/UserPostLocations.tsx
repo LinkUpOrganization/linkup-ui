@@ -24,7 +24,11 @@ export default function UserPostLocations({ userId }: UserPostLocationsProps) {
   }, [postLocations]);
 
   if (!positions.length)
-    return <Typography sx={{ mt: 4, color: "text.secondary" }}>User doesn't have posts with locations yet</Typography>;
+    return (
+      <Typography sx={{ width: "100%", mt: 4, color: "text.secondary" }} textAlign="center">
+        User doesn't have posts with locations yet
+      </Typography>
+    );
 
   const center: LatLngExpression = positions[0];
 

@@ -1,91 +1,62 @@
+import { createFileRoute } from "@tanstack/react-router";
 import Header from "@/components/auth/Header";
-import { useAuth } from "@/contexts/AuthProvider";
-import { Alert, Box, Button, Card, CardContent, CircularProgress, Divider } from "@mui/material";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { ROUTES } from "@/constants/routes";
-import { useMutation } from "@tanstack/react-query";
-import { logout } from "@/api/auth";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import { extractApiErrorMessage } from "@/utils/extractErrorMessage";
-import FollowersInfo from "@/components/profile/FollowersInfo";
-import EmailVerificationCall from "@/components/profile/EmailVerificationCall";
-import ProfileHeader from "@/components/profile/ProfileHeader";
+import { Box, Tab, Tabs } from "@mui/material";
+import { useProfilePage } from "@/hooks/useProfilePage";
+import UserLoadingState from "@/components/user/UserLoadingState";
+import CurrentUserProfileCard from "@/components/profile/CurrentUserProfileCard";
+import { useEffect, useRef, useState } from "react";
+import UserPostsSection from "@/components/profile/UserPostsSection";
+import UserPostLocations from "@/components/maps/routemap/UserPostLocations";
 
 export const Route = createFileRoute("/_protected/profile")({
   component: ProfilePage,
 });
 
 function ProfilePage() {
-  const { user, setToken } = useAuth();
-  const navigate = useNavigate();
+  const { user, handleVerifyEmail, handleLogout, isPending, isError, error } = useProfilePage();
+  const [activeTab, setActiveTab] = useState<"posts" | "map">("posts");
+  const mapRef = useRef<HTMLDivElement | null>(null);
 
-  const handleVerifyEmail = () => {
-    navigate({ to: ROUTES.VERIFY_EMAIL });
-  };
+  useEffect(() => {
+    if (activeTab === "map" && mapRef.current) {
+      mapRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [activeTab]);
 
-  const {
-    mutate: handleLogout,
-    isPending,
-    isError,
-    error,
-  } = useMutation({
-    mutationFn: logout,
-    onSuccess: () => {
-      setToken(null);
-      navigate({ to: "/", search: { sort: "recent" } });
-    },
-    onError: (error: any) => {
-      console.log(error);
-    },
-  });
-
-  if (user == null)
-    return (
-      <>
-        <Header />
-        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "50vh" }}>
-          <CircularProgress />
-        </Box>
-      </>
-    );
+  if (!user) return <UserLoadingState />;
 
   return (
     <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <Header />
-      <Box sx={{ display: "flex", justifyContent: "center", flexGrow: 1, mt: 12, px: { xs: 2, sm: 4 } }}>
-        <Card sx={{ maxWidth: 600, width: "100%", height: "fit-content" }}>
-          <CardContent>
-            {!user.isVerified && <EmailVerificationCall handleVerifyEmail={handleVerifyEmail} />}
-            {isError && (
-              <Alert icon={<ErrorOutlineIcon fontSize="inherit" />} sx={{ mb: 2 }} severity="error">
-                {extractApiErrorMessage(error, "Failed to logout. Pleasy, try again later")}
-              </Alert>
-            )}
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: { xs: "center", sm: "start" },
-                justifyContent: "space-between",
-                flexDirection: { xs: "column", sm: "row" },
-                gap: 3,
-              }}
-            >
-              <ProfileHeader user={user} />
-              <Button
-                variant="contained"
-                size="small"
-                sx={{ my: "auto", width: { xs: "80%", sm: "auto" } }}
-                disabled={isPending}
-                onClick={() => handleLogout()}
-              >
-                Log out
-              </Button>
-            </Box>
-            <Divider sx={{ my: 2 }} />
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          flexGrow: 1,
+          mt: 4,
+        }}
+      >
+        <CurrentUserProfileCard
+          user={user}
+          handleLogout={handleLogout}
+          handleVerifyEmail={handleVerifyEmail}
+          isError={isError}
+          error={error}
+          isPending={isPending}
+        />
 
-            <FollowersInfo followersCount={user.followersCount} followingCount={user.followingCount} />
-          </CardContent>
-        </Card>
+        <Tabs value={activeTab} onChange={(_, newValue) => setActiveTab(newValue)} centered variant="fullWidth">
+          <Tab label="Posts" value="posts" />
+          <Tab label="Route" value="map" />
+        </Tabs>
+
+        {activeTab === "posts" && <UserPostsSection userId={user.id} />}
+        {activeTab === "map" && (
+          <Box ref={mapRef} sx={{ height: "calc(100vh - 145px)", width: "100%", mt: 1 }}>
+            <UserPostLocations userId={user.id} />
+          </Box>
+        )}
       </Box>
     </Box>
   );
