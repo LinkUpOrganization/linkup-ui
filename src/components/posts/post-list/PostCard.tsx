@@ -1,6 +1,6 @@
 import UserAvatar from "@/components/auth/UserAvatar";
 import { Favorite, Comment, FavoriteBorder } from "@mui/icons-material";
-import { Card, CardContent, Box, Typography, IconButton, type SxProps, type Theme } from "@mui/material";
+import { Card, CardContent, Box, Typography, IconButton, type SxProps, type Theme, useTheme } from "@mui/material";
 import { formatDistanceToNow } from "date-fns";
 import PostPhotos from "./PostPhotos";
 import { memo } from "react";
@@ -15,6 +15,7 @@ type PostCardProps = {
 
 const PostCard = memo(function PostCard({ post, handleLike, sx }: PostCardProps) {
   const { user } = useAuth();
+  const theme = useTheme();
 
   return (
     <Card sx={{ mb: 2, ...sx }}>
@@ -38,7 +39,7 @@ const PostCard = memo(function PostCard({ post, handleLike, sx }: PostCardProps)
               >
                 {post.author?.displayName || "Unknown User"}
               </Link>
-              <Typography component="span" variant="caption" color="text.secondary" sx={{ ml: 0.5 }}>
+              <Typography component="span" variant="caption" color={theme.palette.text.secondary} sx={{ ml: 0.5 }}>
                 • {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
               </Typography>
             </Typography>
@@ -47,7 +48,7 @@ const PostCard = memo(function PostCard({ post, handleLike, sx }: PostCardProps)
               <Box sx={{ display: "flex", alignItems: "center", minWidth: 0 }}>
                 <Typography
                   variant="caption"
-                  color="text.secondary"
+                  color={theme.palette.text.secondary}
                   noWrap
                   sx={{ flex: 1, textOverflow: "ellipsis", overflow: "hidden" }}
                 >
@@ -88,7 +89,7 @@ const PostCard = memo(function PostCard({ post, handleLike, sx }: PostCardProps)
           >
             {post.isLikedByCurrentUser ? <Favorite fontSize="small" /> : <FavoriteBorder fontSize="small" />}
           </IconButton>
-          <Typography variant="caption" color="text.secondary">
+          <Typography variant="caption" color={theme.palette.text.secondary}>
             {post.reactionCount || 0}
           </Typography>
 
@@ -96,7 +97,7 @@ const PostCard = memo(function PostCard({ post, handleLike, sx }: PostCardProps)
             <IconButton color="default" size="small">
               <Comment fontSize="small" />
             </IconButton>
-            <Typography variant="caption" color="text.secondary">
+            <Typography variant="caption" color={theme.palette.text.secondary}>
               {post.commentCount || 0}
             </Typography>
           </Link>

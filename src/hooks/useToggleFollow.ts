@@ -1,8 +1,14 @@
 import { toggleFollow } from "@/api/users";
+import { useAuth } from "@/contexts/AuthProvider";
+import { getToastStyle } from "@/utils/toastTheme";
+import { useTheme } from "@mui/material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 export default function useToggleFollow(user: UserProfile | undefined) {
   const queryClient = useQueryClient();
+  const theme = useTheme();
+  const { user: currentUser } = useAuth();
 
   const {
     mutate,
@@ -42,6 +48,14 @@ export default function useToggleFollow(user: UserProfile | undefined) {
   });
 
   const handleFollowToggle = () => {
+    if (!currentUser) {
+      return toast("Please log in to follow the user", {
+        id: "login-required-follow",
+        style: getToastStyle(theme),
+        duration: 3000,
+        position: "bottom-left",
+      });
+    }
     if (!user) return;
     mutate({
       followeeId: user.id,

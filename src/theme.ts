@@ -7,6 +7,14 @@ declare module "@mui/material/styles" {
   interface PaletteOptions {
     toast?: PaletteOptions["primary"];
   }
+
+  interface Theme {
+    custom: {};
+  }
+
+  interface ThemeOptions {
+    custom?: {};
+  }
 }
 
 const theme = createTheme({

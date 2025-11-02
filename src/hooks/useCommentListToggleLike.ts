@@ -47,13 +47,12 @@ export function useCommentListToggleLike() {
   const handleToggleCommentLike = useCallback(
     (postId: string, commentId: string, isLiked: boolean) => {
       if (!user || likePending) {
-        toast("Please log in to like posts", {
-          id: "login-required-posts",
+        return toast("Please log in to like comments", {
+          id: "login-required-comments",
           style: getToastStyle(theme),
           duration: 3000,
           position: "bottom-left",
         });
-        return;
       }
       const newLikeState = !isLiked;
       togglePostCommentLikeMutation({ postId, commentId, isLiked: newLikeState });
