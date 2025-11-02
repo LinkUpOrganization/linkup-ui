@@ -1,5 +1,14 @@
 import { createTheme } from "@mui/material/styles";
 
+declare module "@mui/material/styles" {
+  interface Palette {
+    toast: Palette["primary"];
+  }
+  interface PaletteOptions {
+    toast?: PaletteOptions["primary"];
+  }
+}
+
 const theme = createTheme({
   palette: {
     mode: "light",
@@ -14,6 +23,11 @@ const theme = createTheme({
       light: "#ffb74d",
       dark: "#c25e00",
       contrastText: "#ffffff",
+    },
+    toast: {
+      main: "#fff8e1",
+      dark: "#ffe082",
+      contrastText: "#4a3c00",
     },
     background: {
       default: "#f0f7f4",

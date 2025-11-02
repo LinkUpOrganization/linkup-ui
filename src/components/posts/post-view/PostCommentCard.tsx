@@ -19,7 +19,7 @@ export default function PostCommentCard({ comment, handleToggleCommentLike }: Po
       key={comment.id}
       variant="outlined"
       sx={{
-        mb: 1.5,
+        my: 1.5,
         borderRadius: 2,
         boxShadow: "none",
         backgroundColor: "background.paper",

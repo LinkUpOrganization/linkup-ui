@@ -12,6 +12,7 @@ import { ThemeProvider } from "@emotion/react";
 import theme from "./theme.ts";
 import CssBaseline from "@mui/material/CssBaseline";
 import { AuthProvider, useAuth } from "./contexts/AuthProvider.tsx";
+import { Toaster } from "react-hot-toast";
 
 // Create a new router instance
 
@@ -58,6 +59,7 @@ if (rootElement && !rootElement.innerHTML) {
         <CssBaseline />
         <AuthProvider>
           <AppWithRouter />
+          <Toaster position="bottom-center" />
         </AuthProvider>
       </ThemeProvider>
     </TanStackQueryProvider.Provider>

@@ -1,9 +1,15 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { togglePostLike } from "../api/posts";
 import { useCallback } from "react";
+import { useAuth } from "@/contexts/AuthProvider";
+import { useTheme } from "@mui/material";
+import toast from "react-hot-toast";
+import { getToastStyle } from "@/utils/toastTheme";
 
 export function usePostToggleLike() {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
+  const theme = useTheme();
 
   const toggleLikeMutation = useMutation({
     mutationFn: ({ postId, isLiked }: { postId: string; isLiked: boolean }) => togglePostLike(postId, isLiked),
@@ -43,12 +49,22 @@ export function usePostToggleLike() {
 
   const handleLike = useCallback(
     (postId: string, isLikedByCurrentUser: boolean) => {
+      if (!user) {
+        toast("Please log in to like posts", {
+          id: "login-required-posts",
+          style: getToastStyle(theme),
+          duration: 3000,
+          position: "bottom-left",
+        });
+        return;
+      }
+
       toggleLikeMutation.mutate({
         postId,
         isLiked: !isLikedByCurrentUser,
       });
     },
-    [togglePostLike]
+    [user, theme, toggleLikeMutation]
   );
 
   return { handleLike };

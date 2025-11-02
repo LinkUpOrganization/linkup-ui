@@ -83,6 +83,8 @@ export default function PostsListPage() {
           position: "fixed",
           bottom: 24,
           right: 24,
+          height: 50,
+          width: 50,
         }}
         onClick={() => navigate({ to: "/create-post" })}
       >

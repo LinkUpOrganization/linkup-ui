@@ -3,10 +3,14 @@ import { togglePostCommentLike } from "../api/posts";
 import { useParams } from "@tanstack/react-router";
 import { useAuth } from "@/contexts/AuthProvider";
 import { useCallback } from "react";
+import { getToastStyle } from "@/utils/toastTheme";
+import { useTheme } from "@mui/material";
+import toast from "react-hot-toast";
 
 export function useCommentListToggleLike() {
   const queryClient = useQueryClient();
   const { user } = useAuth();
+  const theme = useTheme();
   const { postId } = useParams({ from: "/posts/$postId" });
 
   const { mutate: togglePostCommentLikeMutation, isPending: likePending } = useMutation({
@@ -42,11 +46,19 @@ export function useCommentListToggleLike() {
 
   const handleToggleCommentLike = useCallback(
     (postId: string, commentId: string, isLiked: boolean) => {
-      if (!user || likePending) return;
+      if (!user || likePending) {
+        toast("Please log in to like posts", {
+          id: "login-required-posts",
+          style: getToastStyle(theme),
+          duration: 3000,
+          position: "bottom-left",
+        });
+        return;
+      }
       const newLikeState = !isLiked;
       togglePostCommentLikeMutation({ postId, commentId, isLiked: newLikeState });
     },
-    [togglePostCommentLikeMutation]
+    [user, theme, togglePostCommentLikeMutation]
   );
 
   return { handleToggleCommentLike };
