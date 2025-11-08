@@ -60,12 +60,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       async (error) => {
         const originalRequest = error.config;
 
+        if (originalRequest.url?.includes("/auth/refresh-token")) {
+          return Promise.reject(error);
+        }
+
         if (error.response?.status === 401 && !originalRequest._retry) {
+          originalRequest._retry = true;
+
           const { success, data: accessToken } = await refreshToken();
           if (success && accessToken) {
             setToken(accessToken);
             originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-            originalRequest._retry = true;
             return apiClient(originalRequest);
           } else {
             setToken(null);
@@ -75,6 +80,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return Promise.reject(error);
       }
     );
+
     return () => apiClient.interceptors.response.eject(refreshInterceptor);
   }, []);
 
