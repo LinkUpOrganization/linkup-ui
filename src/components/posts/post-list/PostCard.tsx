@@ -19,8 +19,8 @@ const PostCard = memo(function PostCard({ post, handleLike, sx }: PostCardProps)
 
   return (
     <Card sx={{ mb: 2, ...sx }}>
-      <CardContent sx={{ p: 2, display: "flex", alignItems: "flex-start", gap: 1 }}>
-        <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+      <CardContent sx={{ display: "flex", alignItems: "flex-start", gap: 1, pb: 0 }}>
+        <Box sx={{ display: "flex", alignItems: "center", mt: 0.3 }}>
           <Link
             to={user?.id === post.author.id ? "/profile" : "/users/$userId"}
             params={user?.id === post.author.id ? undefined : { userId: post.author.id }}
@@ -33,7 +33,7 @@ const PostCard = memo(function PostCard({ post, handleLike, sx }: PostCardProps)
           </Link>
         </Box>
         <Box sx={{ flexGrow: 1, minWidth: 0, overflow: "hidden" }}>
-          <Box sx={{ mb: 1 }}>
+          <Box sx={{ mb: 0.5 }}>
             <Typography variant="subtitle2" fontWeight={600} noWrap>
               <Link
                 to={user?.id === post.author.id ? "/profile" : "/users/$userId"}
@@ -71,18 +71,22 @@ const PostCard = memo(function PostCard({ post, handleLike, sx }: PostCardProps)
             )}
           </Box>
 
-          <Typography variant="body2" sx={{ mb: 1, color: "black" }}>
+          <Typography variant="body2" sx={{ color: "black" }}>
             {post.title}
           </Typography>
-
+          {/* 
           {post.content && (
             <Typography variant="body2" sx={{ mb: 1.5, lineHeight: 1.5 }}>
               {post.content}
             </Typography>
-          )}
+          )} */}
+        </Box>
+      </CardContent>
 
-          <PostPhotos photos={post.photos} />
+      <PostPhotos photos={post.photos} />
 
+      <CardContent sx={{ display: "flex", alignItems: "flex-start", gap: 1, pl: "60px", pt: 0 }}>
+        <Box>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1, pt: 1 }}>
             <IconButton
               onClick={() => handleLike(post.id, !!post.isLikedByCurrentUser)}

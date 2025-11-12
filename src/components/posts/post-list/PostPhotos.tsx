@@ -1,5 +1,4 @@
-import { PREVIEW_IMAGES_COUNT } from "@/constants/posts";
-import { Box, ImageList, ImageListItem, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Box, useMediaQuery, useTheme } from "@mui/material";
 import { PhotoProvider, PhotoView } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
 
@@ -8,44 +7,65 @@ export default function PostPhotos({ photos }: { photos: PostPhoto[] }) {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   if (!photos || photos.length === 0) return null;
-
   if (photos.length === 1) {
     return (
-      <PhotoProvider>
-        <PhotoView src={photos[0].url}>
-          <Box
-            component="img"
-            src={photos[0].url}
-            alt="Post image"
-            loading="lazy"
-            sx={{
-              width: "100%",
-              height: isMobile ? 120 : 250,
-              objectFit: "cover",
-              borderRadius: 1,
-              mb: 2,
-              cursor: "pointer",
-            }}
-          />
-        </PhotoView>
-      </PhotoProvider>
+      <Box mt={1}>
+        <PhotoProvider>
+          <PhotoView src={photos[0].url}>
+            <Box
+              sx={{
+                pl: "60px",
+                pr: "24px",
+                display: "inline-block",
+                borderRadius: 1,
+                overflow: "hidden",
+              }}
+            >
+              <Box
+                component="img"
+                src={photos[0].url}
+                alt="Post image"
+                loading="lazy"
+                sx={{
+                  maxHeight: isMobile ? 240 : 400,
+                  width: "auto",
+                  display: "block",
+                  objectFit: "contain",
+                  cursor: "pointer",
+                  borderRadius: 1,
+                }}
+              />
+            </Box>
+          </PhotoView>
+        </PhotoProvider>
+      </Box>
     );
   }
 
   return (
-    <PhotoProvider>
-      <ImageList sx={{ width: "100%", mb: 2 }} cols={isMobile ? 2 : 3} rowHeight={isMobile ? 120 : 180} gap={4}>
-        {photos.map((photo, index) => {
-          const isHidden = index >= PREVIEW_IMAGES_COUNT;
-          const isOverlay = index === PREVIEW_IMAGES_COUNT - 1 && photos.length > PREVIEW_IMAGES_COUNT;
-
-          return (
-            <ImageListItem
+    <Box mt={1}>
+      <PhotoProvider>
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            overflowX: "auto",
+            pl: "60px",
+            scrollbarWidth: "none",
+            "&::-webkit-scrollbar": { display: "none" },
+          }}
+        >
+          {photos.map((photo, index) => (
+            <Box
               key={photo.id}
-              cols={1}
               sx={{
-                display: isHidden ? "none" : "block",
+                flex: "0 0 auto",
                 position: "relative",
+                height: isMobile ? 180 : 260,
+                minWidth: isMobile ? 160 : 220,
+                maxWidth: isMobile ? 280 : 400,
+                overflow: "hidden",
+                mr: index !== photos.length - 1 ? 1 : 0,
               }}
             >
               <PhotoView src={photo.url}>
@@ -54,40 +74,15 @@ export default function PostPhotos({ photos }: { photos: PostPhoto[] }) {
                   src={photo.url}
                   alt={`Post image ${index + 1}`}
                   loading="lazy"
-                  sx={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    borderRadius: 1,
-                  }}
+                  borderRadius={1}
+                  sx={{ width: "100%", height: "100%", objectFit: "cover", display: "block", cursor: "pointer" }}
                 />
               </PhotoView>
-
-              {isOverlay && (
-                <Box
-                  sx={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    bgcolor: "rgba(0, 0, 0, 0.6)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderRadius: 1,
-                    pointerEvents: "none",
-                  }}
-                >
-                  <Typography variant="h6" color="white" fontWeight={600}>
-                    +{photos.length - PREVIEW_IMAGES_COUNT}
-                  </Typography>
-                </Box>
-              )}
-            </ImageListItem>
-          );
-        })}
-      </ImageList>
-    </PhotoProvider>
+            </Box>
+          ))}
+          <Box sx={{ flex: "0 0 auto", width: "16px" }} />
+        </Box>
+      </PhotoProvider>
+    </Box>
   );
 }

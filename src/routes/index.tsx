@@ -55,7 +55,7 @@ export default function PostsListPage() {
 
       <FilteringTabs sort={sort} setFilter={setFilter} />
 
-      <Box sx={{ width: "100%", maxWidth: 700, px: { xs: 2, sm: 4 }, pb: 4, pt: 4, mx: "auto" }}>
+      <Box sx={{ width: "100%", maxWidth: 650, px: { xs: 2 }, pb: 4, pt: 4, mx: "auto" }}>
         {isLoading ? (
           <PostsLoading />
         ) : isError ? (
