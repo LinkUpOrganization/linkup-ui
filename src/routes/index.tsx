@@ -1,4 +1,4 @@
-import { Box, Typography, Fab } from "@mui/material";
+import { Box, Typography, Fab, useTheme, useMediaQuery } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import { createFileRoute } from "@tanstack/react-router";
 import { useInView } from "react-intersection-observer";
@@ -24,6 +24,8 @@ export const Route = createFileRoute("/")({
 export default function PostsListPage() {
   const navigate = Route.useNavigate();
   const { sort } = Route.useSearch();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const setFilter = (newFilter: PostSortType) => {
     navigate({
@@ -70,7 +72,7 @@ export default function PostsListPage() {
                 border: 1,
                 borderBottom: 0,
                 borderColor: "divider",
-                borderRadius: index === 0 ? "16px 16px 0 0" : 0,
+                borderRadius: index === 0 && !isMobile ? "16px 16px 0 0" : 0,
               }}
               post={post}
               handleLike={handleLike}
