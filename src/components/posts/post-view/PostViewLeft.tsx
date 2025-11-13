@@ -11,7 +11,7 @@ export default function PostViewLeft({
   return (
     <Box
       sx={{
-        flex: 1,
+        flex: { md: 1, xs: "unset" },
         maxWidth: { md: "50%" },
         display: "flex",
         justifyContent: "center",
