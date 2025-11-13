@@ -27,12 +27,12 @@ export default function PostPhotos({ photos }: { photos: PostPhoto[] }) {
                 alt="Post image"
                 loading="lazy"
                 sx={{
-                  maxHeight: isMobile ? 240 : 400,
+                  maxHeight: isMobile ? 240 : 300,
                   width: "auto",
                   display: "block",
                   objectFit: "contain",
                   cursor: "pointer",
-                  borderRadius: 1,
+                  borderRadius: 1.2,
                 }}
               />
             </Box>
@@ -50,7 +50,7 @@ export default function PostPhotos({ photos }: { photos: PostPhoto[] }) {
             <Box
               sx={{
                 display: "flex",
-                gap: 1,
+                gap: 0.5,
                 overflowX: "auto",
                 pl: "60px",
                 pr: 2,
@@ -69,7 +69,7 @@ export default function PostPhotos({ photos }: { photos: PostPhoto[] }) {
                       flexShrink: 0,
                       width: isMobile ? 160 : 200,
                       height: isMobile ? 160 : 200,
-                      borderRadius: 2,
+                      borderRadius: 1,
                       objectFit: "cover",
                       cursor: "pointer",
                       backgroundColor: "#f0f0f0",
