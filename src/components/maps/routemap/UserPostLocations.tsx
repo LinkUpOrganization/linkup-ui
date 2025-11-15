@@ -1,6 +1,6 @@
 import { MapContainer, TileLayer, Polyline, Marker, Popup } from "react-leaflet";
 import { type LatLngExpression } from "leaflet";
-import { Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { getUserPostLocations } from "@/api/posts";
 import { useMemo } from "react";
@@ -12,7 +12,7 @@ type UserPostLocationsProps = {
 };
 
 export default function UserPostLocations({ userId }: UserPostLocationsProps) {
-  const { data: postLocations } = useQuery({
+  const { data: postLocations, isLoading } = useQuery({
     queryKey: ["user-post-locations", userId],
     queryFn: async () => getUserPostLocations(userId),
     enabled: !!userId,
@@ -22,6 +22,14 @@ export default function UserPostLocations({ userId }: UserPostLocationsProps) {
     if (!postLocations) return [];
     return postLocations.map((p) => [p.latitude, p.longitude]);
   }, [postLocations]);
+
+  if (isLoading) {
+    return (
+      <Box textAlign="center" mt={1}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   if (!positions.length)
     return (

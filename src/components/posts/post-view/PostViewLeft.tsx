@@ -27,7 +27,17 @@ export default function PostViewLeft({
       }}
     >
       <Box sx={{ width: "100%", maxWidth: 600 }}>
-        <PostCard post={post} handleLike={handleLike} />
+        <PostCard
+          post={post}
+          handleLike={handleLike}
+          sx={{
+            border: 1,
+            // borderBottom: 0,
+            borderColor: "divider",
+            // pb: 1,
+            // borderRadius: index === 0 && !isMobile ? "16px 16px 0 0" : 0,
+          }}
+        />
       </Box>
     </Box>
   );

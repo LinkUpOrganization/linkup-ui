@@ -1,16 +1,13 @@
-import { Box, Typography, Fab, useTheme, useMediaQuery } from "@mui/material";
-import { Add } from "@mui/icons-material";
+import { Box, Typography } from "@mui/material";
 import { createFileRoute } from "@tanstack/react-router";
 import { useInView } from "react-intersection-observer";
 import { useMemo } from "react";
 import Header from "@/components/auth/Header";
 import { usePostList } from "@/hooks/usePostList";
-import PostsLoading from "@/components/posts/post-list/PostsLoading";
-import PostsError from "@/components/posts/post-list/PostsError";
-import PostsNotFound from "@/components/posts/post-list/PostsNotFound";
-import PostCard from "@/components/posts/post-list/PostCard";
 import { usePostListToggleLike } from "@/hooks/usePostListToggleLike";
 import FilteringTabs from "@/components/posts/post-list/FilteringTabs";
+import AddNewPostButton from "@/components/posts/post-list/AddNewPostButton";
+import PostsList from "@/components/posts/post-list/PostsList";
 
 export const Route = createFileRoute("/")({
   component: PostsListPage,
@@ -24,8 +21,6 @@ export const Route = createFileRoute("/")({
 export default function PostsListPage() {
   const navigate = Route.useNavigate();
   const { sort } = Route.useSearch();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const setFilter = (newFilter: PostSortType) => {
     navigate({
@@ -58,29 +53,8 @@ export default function PostsListPage() {
       <FilteringTabs sort={sort} setFilter={setFilter} />
 
       <Box sx={{ width: "100%", maxWidth: 650, pb: 4, pt: 4, mx: "auto" }}>
-        {isLoading ? (
-          <PostsLoading />
-        ) : isError ? (
-          <PostsError />
-        ) : posts.length === 0 ? (
-          <PostsNotFound />
-        ) : (
-          posts.map((post, index) => (
-            <PostCard
-              key={post.id}
-              sx={{
-                border: 1,
-                borderBottom: 0,
-                borderColor: "divider",
-                borderRadius: index === 0 && !isMobile ? "16px 16px 0 0" : 0,
-              }}
-              post={post}
-              handleLike={handleLike}
-            />
-          ))
-        )}
+        <PostsList posts={posts} isLoading={isLoading} isError={isError} handleLike={handleLike} />
 
-        {/* Sentinel for IntersectionObserver */}
         {hasNextPage && <div ref={loadMoreRef} style={{ height: 1 }} />}
 
         {isFetchingNextPage && (
@@ -90,20 +64,7 @@ export default function PostsListPage() {
         )}
       </Box>
 
-      <Fab
-        color="primary"
-        aria-label="create post"
-        sx={{
-          position: "fixed",
-          bottom: 24,
-          right: 24,
-          height: 50,
-          width: 50,
-        }}
-        onClick={() => navigate({ to: "/create-post" })}
-      >
-        <Add />
-      </Fab>
+      <AddNewPostButton />
     </Box>
   );
 }

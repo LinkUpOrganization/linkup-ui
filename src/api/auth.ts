@@ -10,7 +10,7 @@ export const refreshToken = async (): Promise<ApiResponse<string>> => {
   } catch (error: any) {
     return {
       success: false,
-      message: error.response.data,
+      message: error?.response?.data,
     };
   }
 };
@@ -43,7 +43,7 @@ export const verificationCooldown = async (): Promise<ApiResponse<number>> => {
   } catch (error: any) {
     return {
       success: false,
-      message: error.response.data,
+      message: error?.response?.data,
     };
   }
 };

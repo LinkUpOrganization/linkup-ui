@@ -2,10 +2,7 @@ import Header from "@/components/auth/Header";
 import Map from "@/components/posts/location/Map";
 import RadiusPickerButton from "@/components/posts/location/RadiusPickerButton";
 import FilteringTabs from "@/components/posts/post-list/FilteringTabs";
-import PostCard from "@/components/posts/post-list/PostCard";
 import PostsError from "@/components/posts/post-list/PostsError";
-import PostsLoading from "@/components/posts/post-list/PostsLoading";
-import PostsNotFound from "@/components/posts/post-list/PostsNotFound";
 import SelectLocationPrompt from "@/components/posts/post-list/SelectLocationPrompt";
 import { DEFAULT_ZOOM, SMALL_ZOOM } from "@/constants/posts";
 import { usePostList } from "@/hooks/usePostList";
@@ -15,6 +12,7 @@ import { Box, Typography } from "@mui/material";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { useInView } from "react-intersection-observer";
+import PostsList from "@/components/posts/post-list/PostsList";
 
 export const Route = createFileRoute("/locations")({
   validateSearch: (search: Record<string, unknown>) => {
@@ -77,20 +75,13 @@ function LocationsPage() {
         }
       />
 
-      <Box sx={{ width: "100%", maxWidth: 700, px: { xs: 2, sm: 4 }, pb: 4, pt: 4, mx: "auto" }}>
+      <Box sx={{ width: "100%", maxWidth: 650, pb: 4, pt: 4, mx: "auto" }}>
         {!latitude || !longitude ? (
           <SelectLocationPrompt />
-        ) : isLoading ? (
-          <PostsLoading />
-        ) : isError ? (
-          <PostsError />
-        ) : posts.length === 0 ? (
-          <PostsNotFound />
         ) : (
-          posts.map((post) => <PostCard key={post.id} post={post} handleLike={handleLike} />)
+          <PostsList posts={posts} isLoading={isLoading} isError={isError} handleLike={handleLike} />
         )}
 
-        {/* Sentinel for IntersectionObserver */}
         {hasNextPage && <div ref={loadMoreRef} style={{ height: 1 }} />}
 
         {isFetchingNextPage && (

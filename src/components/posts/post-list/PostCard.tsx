@@ -98,11 +98,12 @@ const PostCard = memo(function PostCard({ post, handleLike, sx }: PostCardProps)
 
       <CardContent
         sx={{
-          display: "flex",
-          alignItems: "flex-start",
-          gap: 1,
-          py: "8px !important",
-          pl: "60px",
+          "&&": {
+            display: "flex",
+            alignItems: "flex-start",
+            gap: 1,
+            padding: "0 4px 10px 60px",
+          },
         }}
       >
         <Box>

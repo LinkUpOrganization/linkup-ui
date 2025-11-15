@@ -3,9 +3,7 @@ import { useMemo } from "react";
 import { useInView } from "react-intersection-observer";
 import { usePostList } from "@/hooks/usePostList";
 import { usePostListToggleLike } from "@/hooks/usePostListToggleLike";
-import PostsLoading from "@/components/posts/post-list/PostsLoading";
-import PostsError from "@/components/posts/post-list/PostsError";
-import PostCard from "@/components/posts/post-list/PostCard";
+import PostsList from "../posts/post-list/PostsList";
 
 export default function UserPostsSection({ userId }: { userId: string }) {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError } = usePostList({
@@ -30,14 +28,8 @@ export default function UserPostsSection({ userId }: { userId: string }) {
   });
 
   return (
-    <Box sx={{ px: { xs: 2, sm: 4 }, width: "100%", maxWidth: 700 }}>
-      {isLoading ? (
-        <PostsLoading />
-      ) : isError ? (
-        <PostsError />
-      ) : (
-        posts.map((post) => <PostCard key={post.id} post={post} handleLike={handleLike} />)
-      )}
+    <Box sx={{ width: "100%", maxWidth: 650, pb: 4, pt: 4, mx: "auto" }}>
+      <PostsList posts={posts} isLoading={isLoading} isError={isError} handleLike={handleLike} />
 
       {hasNextPage && <div ref={loadMoreRef} style={{ height: 1 }} />}
       {isFetchingNextPage && (
