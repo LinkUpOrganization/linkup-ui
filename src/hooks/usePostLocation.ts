@@ -1,5 +1,6 @@
+import { getDefaultLocation } from "@/api/posts";
 import { Route } from "@/routes/locations";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 
 export function usePostLocation() {
   const navigate = Route.useNavigate();
@@ -20,6 +21,19 @@ export function usePostLocation() {
     },
     [navigate]
   );
+
+  useEffect(() => {
+    if (latitude !== undefined && longitude !== undefined) return;
+
+    const fetchDefaultLocation = async () => {
+      const { success, data: defaultLocation } = await getDefaultLocation();
+      if (success && defaultLocation) {
+        setFilter("recent", defaultLocation);
+      }
+    };
+
+    fetchDefaultLocation();
+  }, [latitude, longitude, setFilter]);
 
   const handleSelectLocation = useCallback(
     async (coordinates: LocationCoordinates) => {

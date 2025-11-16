@@ -100,3 +100,18 @@ export const getUserPostLocations = async (userId: string): Promise<LocationCoor
   });
   return response.data;
 };
+
+export const getDefaultLocation = async (): Promise<ApiResponse<LocationCoordinates>> => {
+  try {
+    const response = await apiClient.get("/geo/default");
+    return {
+      success: true,
+      data: response.data,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: error?.response?.data,
+    };
+  }
+};
