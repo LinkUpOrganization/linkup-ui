@@ -24,8 +24,6 @@ export default function useEditPost({ postId, initialPost }: UseEditPostProps) {
   const availableImagesCount =
     MAX_IMAGES_COUNT - (initialPost?.photos.length ?? 0) - selectedImages.length + deletedImages.length;
 
-  console.log(availableImagesCount);
-
   const {
     control,
     handleSubmit,
@@ -35,12 +33,10 @@ export default function useEditPost({ postId, initialPost }: UseEditPostProps) {
   } = useForm<PostFormValues>({
     resolver: zodResolver(postSchema),
     defaultValues: {
-      title: initialPost?.title || "",
       content: initialPost?.content || "",
     },
   });
 
-  const titleValue = watch("title") ?? "";
   const contentValue = watch("content") ?? "";
 
   const {
@@ -62,13 +58,11 @@ export default function useEditPost({ postId, initialPost }: UseEditPostProps) {
     if (!initialPost) return;
 
     reset({
-      title: initialPost.title,
       content: initialPost.content,
     });
 
     const latitude = Number(initialPost?.latitude);
     const longitude = Number(initialPost?.longitude);
-    console.log(initialPost);
 
     if (!isNaN(latitude) && !isNaN(longitude)) {
       const initialLocation: PostLocation = {
@@ -101,8 +95,7 @@ export default function useEditPost({ postId, initialPost }: UseEditPostProps) {
     if (initialPost == null) return;
 
     const formData = new FormData();
-    if (data.title != initialPost.title) formData.append("Title", data.title);
-    if (data.content != null && data?.content != initialPost.content) formData.append("Content", data.content);
+    if (data.content != initialPost.content) formData.append("Content", data.content);
     if (data.latitude && String(data.latitude) != initialPost.latitude)
       formData.append("Latitude", String(data.latitude));
     if (data.longitude && String(data.longitude) != initialPost.longitude)
@@ -141,7 +134,6 @@ export default function useEditPost({ postId, initialPost }: UseEditPostProps) {
     handleSubmit,
     control,
     errors,
-    titleValue,
     contentValue,
     handleImageSelect,
     handleRemoveSelectedImage,

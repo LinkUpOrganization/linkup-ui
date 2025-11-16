@@ -1,8 +1,12 @@
 import z from "zod";
 
 export const postSchema = z.object({
-  title: z.string().trim().min(1, "Title is required").max(100, "Title must be at most 100 characters"),
-  content: z.string().trim().max(300, "Content must be at most 300 characters").nullable().optional().or(z.literal("")),
+  content: z
+    .string()
+    .trim()
+    .min(1, "Content is required")
+    .min(3, "Content is too short")
+    .max(100, "Content must be at most 100 characters"),
   latitude: z.number().nullable().optional(),
   longitude: z.number().nullable().optional(),
   address: z.string().nullable().optional(),

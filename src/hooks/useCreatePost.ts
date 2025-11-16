@@ -34,12 +34,10 @@ export default function useCreatePost() {
   } = useForm<PostFormValues>({
     resolver: zodResolver(postSchema),
     defaultValues: {
-      title: "",
       content: "",
     },
   });
 
-  const titleValue = watch("title") || "";
   const contentValue = watch("content") || "";
 
   const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,8 +52,7 @@ export default function useCreatePost() {
   const onSubmit = (data: PostFormValues) => {
     const formData = new FormData();
 
-    formData.append("Title", data.title);
-    if (data.content) formData.append("Content", data.content);
+    formData.append("Content", data.content);
 
     if (data.latitude) formData.append("Latitude", String(data.latitude));
     if (data.longitude) formData.append("Longitude", String(data.longitude));
@@ -69,10 +66,8 @@ export default function useCreatePost() {
   };
 
   const requestUserLocation = () => {
-    if (!navigator.geolocation) {
-      alert("Geolocation is not supported by your browser.");
-      return;
-    }
+    if (!navigator.geolocation) return;
+
     navigator.geolocation.getCurrentPosition(async (pos) => {
       const { latitude, longitude } = pos.coords;
       const address = await reverseGeocode(pos.coords);
@@ -91,7 +86,6 @@ export default function useCreatePost() {
     isPending,
     isError,
     errors,
-    titleValue,
     contentValue,
     handleImageSelect,
     handleRemoveImage,

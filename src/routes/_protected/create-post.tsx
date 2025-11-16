@@ -5,7 +5,6 @@ import SelectedImagesList from "@/components/posts/create-post/SelectedImagesLis
 import CreatePostActions from "@/components/posts/create-post/CreatePostActions";
 import useCreatePost from "@/hooks/useCreatePost";
 import UserInfoSection from "@/components/posts/create-post/UserInfoSection";
-import TitleField from "@/components/posts/create-post/TitleField";
 import ContentField from "@/components/posts/create-post/ContentField";
 import LocationModal from "@/components/posts/create-post/LocationModal";
 import { useState } from "react";
@@ -23,7 +22,6 @@ export default function CreatePostPage() {
     isPending,
     isError,
     errors,
-    titleValue,
     contentValue,
     handleImageSelect,
     handleRemoveImage,
@@ -40,7 +38,7 @@ export default function CreatePostPage() {
       <Box
         component="form"
         onSubmit={handleSubmit((data) => onSubmit({ ...data, ...location }))}
-        sx={{ display: "flex", justifyContent: "center", py: 8, px: 2 }}
+        sx={{ mx: "auto", width: "100%", maxWidth: 650, py: { xs: 0, sm: 8 } }}
       >
         <Card sx={{ maxWidth: 600, width: "100%" }}>
           <CardContent sx={{ p: 3 }}>
@@ -55,7 +53,6 @@ export default function CreatePostPage() {
             )}
 
             <UserInfoSection />
-            <TitleField control={control} errors={errors} value={titleValue} />
             <ContentField control={control} errors={errors} value={contentValue} />
             <SelectedImagesList selectedImages={selectedImages} handleRemoveSelectedImage={handleRemoveImage} />
             <SelectLocationButton location={location} setLocation={setLocation} setModalOpen={setModalOpen} />

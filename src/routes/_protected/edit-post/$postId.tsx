@@ -4,7 +4,6 @@ import Header from "@/components/auth/Header";
 import EditPostActions from "@/components/posts/edit-post/EditPostActions";
 import useEditPost from "@/hooks/useEditPost";
 import { useState } from "react";
-import TitleField from "@/components/posts/create-post/TitleField";
 import ContentField from "@/components/posts/create-post/ContentField";
 import SelectLocationButton from "@/components/posts/create-post/SelectLocationButton";
 import LocationModal from "@/components/posts/create-post/LocationModal";
@@ -37,7 +36,6 @@ export default function EditPostPage() {
     handleSubmit,
     control,
     errors,
-    titleValue,
     contentValue,
     isEditPending,
     isEditError,
@@ -55,68 +53,66 @@ export default function EditPostPage() {
     availableImagesCount,
   } = useEditPost({ postId, initialPost });
 
-  console.log(initialPost);
-
   const [modalOpen, setModalOpen] = useState(false);
-
-  if (isPostLoading) return <PostsLoading cardNumber={1} />;
-  if (isPostError) return <PostNotFound />;
 
   return (
     <Box sx={{ minHeight: "100vh", backgroundColor: "background.default" }}>
       <Header />
-      <Box
-        component="form"
-        onSubmit={handleSubmit((data) => onEditPost({ ...data, ...location }))}
-        sx={{ display: "flex", justifyContent: "center", py: 8, px: 2 }}
-      >
-        <Card sx={{ maxWidth: 600, width: "100%" }}>
-          <CardContent sx={{ p: 3 }}>
-            <Typography variant="h5" sx={{ mb: 3, fontWeight: 600 }}>
-              Edit Post
-            </Typography>
+      <Box sx={{ mx: "auto", width: "100%", maxWidth: 650, py: { xs: 0, sm: 8 } }}>
+        {isPostLoading ? (
+          <PostsLoading cardNumber={1} />
+        ) : isPostError ? (
+          <PostNotFound />
+        ) : (
+          <Box component="form" onSubmit={handleSubmit((data) => onEditPost({ ...data, ...location }))}>
+            <Card sx={{ maxWidth: 600, width: "100%" }}>
+              <CardContent sx={{ p: 3 }}>
+                <Typography variant="h5" sx={{ mb: 3, fontWeight: 600 }}>
+                  Edit Post
+                </Typography>
 
-            {isEditError && (
-              <Alert severity="error" sx={{ mb: 3 }}>
-                Failed to update post. {editError?.response?.data ?? ""}
-              </Alert>
-            )}
+                {isEditError && (
+                  <Alert severity="error" sx={{ mb: 3 }}>
+                    Failed to update post. {editError?.response?.data ?? ""}
+                  </Alert>
+                )}
 
-            {isDeleteError && (
-              <Alert severity="error" sx={{ mb: 3 }}>
-                Failed to update post. {deleteError?.response?.data ?? ""}
-              </Alert>
-            )}
+                {isDeleteError && (
+                  <Alert severity="error" sx={{ mb: 3 }}>
+                    Failed to update post. {deleteError?.response?.data ?? ""}
+                  </Alert>
+                )}
 
-            <UserInfoSection />
-            <TitleField control={control} errors={errors} value={titleValue} />
-            <ContentField control={control} errors={errors} value={contentValue} />
-            <SelectedImagesList
-              selectedImages={selectedImages}
-              existingImages={initialPost?.photos}
-              handleRemoveSelectedImage={handleRemoveSelectedImage}
-              handleRemoveExistingImage={handleRemoveExistingImage}
-            />
-            <SelectLocationButton location={location} setLocation={setLocation} setModalOpen={setModalOpen} />
+                <UserInfoSection />
+                <ContentField control={control} errors={errors} value={contentValue} />
+                <SelectedImagesList
+                  selectedImages={selectedImages}
+                  existingImages={initialPost?.photos}
+                  handleRemoveSelectedImage={handleRemoveSelectedImage}
+                  handleRemoveExistingImage={handleRemoveExistingImage}
+                />
+                <SelectLocationButton location={location} setLocation={setLocation} setModalOpen={setModalOpen} />
 
-            <Divider sx={{ mb: 3 }} />
+                <Divider sx={{ mb: 3 }} />
 
-            <EditPostActions
-              handleImageSelect={handleImageSelect}
-              handleDeletePost={handleDeletePost}
-              isEditPending={isEditPending}
-              isDeletePending={isDeletePending}
-              availableImagesCount={availableImagesCount}
-            />
-          </CardContent>
-        </Card>
+                <EditPostActions
+                  handleImageSelect={handleImageSelect}
+                  handleDeletePost={handleDeletePost}
+                  isEditPending={isEditPending}
+                  isDeletePending={isDeletePending}
+                  availableImagesCount={availableImagesCount}
+                />
+              </CardContent>
+            </Card>
+          </Box>
+        )}
       </Box>
 
       <LocationModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         onSave={(loc) => setLocation(loc)}
-        intialLocation={location}
+        initialLocation={location}
       />
     </Box>
   );

@@ -11,8 +11,7 @@ type AuthorType = {
 
 type Post = {
   id: string;
-  title: string;
-  content: string | null;
+  content: string;
   latitude: string | null;
   longitude: string | null;
   address: string | null;

@@ -29,12 +29,13 @@ export default function EditPostActions({
       sx={{
         display: "flex",
         justifyContent: "space-between",
-        alignItems: "center",
+        flexDirection: { xs: "column", sm: "row" },
+        gap: 2,
       }}
     >
       <SelectImagesInput selectedImagesCount={totalImagesCount} handleImageSelect={handleImageSelect} />
 
-      <Box sx={{ display: "flex", gap: 2 }}>
+      <Box sx={{ display: "flex", justifyContent: "space-between", gap: { xs: 0.5, sm: 1 } }}>
         <Button
           variant="outlined"
           color="error"

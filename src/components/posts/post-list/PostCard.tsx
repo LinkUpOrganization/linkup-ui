@@ -83,14 +83,8 @@ const PostCard = memo(function PostCard({ post, handleLike, sx }: PostCardProps)
           </Box>
 
           <Typography variant="body2" sx={{ color: "black" }}>
-            {post.title}
+            {post.content}
           </Typography>
-          {/* 
-          {post.content && (
-            <Typography variant="body2" sx={{ mb: 1.5, lineHeight: 1.5 }}>
-              {post.content}
-            </Typography>
-          )} */}
         </Box>
       </CardContent>
 
