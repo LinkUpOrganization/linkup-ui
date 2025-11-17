@@ -43,38 +43,44 @@ function Analytics() {
 
         <Box
           sx={{
-            mt: 2,
+            mt: { xs: 2, md: 2 },
             maxWidth: 800,
-            p: 2,
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",
             flexGrow: 1,
+            height: { xs: "calc(100vh - 380px)", sm: "100%" },
           }}
         >
-          <Typography variant="h6" sx={{ mb: 4 }} gutterBottom>
+          <Typography textAlign="center" variant="h6" sx={{ mb: { xs: 2, md: 4 } }} gutterBottom>
             Clusters of Posts
           </Typography>
 
-          {isLoading ? (
-            <CircularProgress />
-          ) : !clusters || clusters.length === 0 ? (
-            <Typography>No cluster data available.</Typography>
-          ) : (
-            <List
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-              }}
-            >
-              {clusters.map((cluster) => (
-                <ClusterItem key={cluster.id} cluster={cluster} onClick={handleClusterClick} />
-              ))}
-            </List>
-          )}
+          <Box
+            sx={{
+              overflowY: "auto",
+            }}
+          >
+            {isLoading ? (
+              <CircularProgress />
+            ) : !clusters || clusters.length === 0 ? (
+              <Typography>No cluster data available.</Typography>
+            ) : (
+              <List
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "100%",
+                  px: 2,
+                }}
+              >
+                {clusters.map((cluster) => (
+                  <ClusterItem key={cluster.id} cluster={cluster} onClick={handleClusterClick} />
+                ))}
+              </List>
+            )}
+          </Box>
         </Box>
       </Box>
     </Box>
