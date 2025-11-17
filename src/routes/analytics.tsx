@@ -47,6 +47,7 @@ function Analytics() {
             maxWidth: 800,
             display: "flex",
             flexDirection: "column",
+            alignItems: "center",
             flexGrow: 1,
             height: { xs: "calc(100vh - 380px)", sm: "100%" },
           }}
@@ -55,32 +56,27 @@ function Analytics() {
             Clusters of Posts
           </Typography>
 
-          <Box
-            sx={{
-              overflowY: "auto",
-            }}
-          >
-            {isLoading ? (
-              <CircularProgress />
-            ) : !clusters || clusters.length === 0 ? (
-              <Typography>No cluster data available.</Typography>
-            ) : (
-              <List
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  width: "100%",
-                  px: 2,
-                }}
-              >
-                {clusters.map((cluster) => (
-                  <ClusterItem key={cluster.id} cluster={cluster} onClick={handleClusterClick} />
-                ))}
-              </List>
-            )}
-          </Box>
+          {isLoading ? (
+            <CircularProgress />
+          ) : !clusters || clusters.length === 0 ? (
+            <Typography>No cluster data available.</Typography>
+          ) : (
+            <List
+              sx={{
+                overflowY: "auto",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                px: 2,
+              }}
+            >
+              {clusters.map((cluster) => (
+                <ClusterItem key={cluster.id} cluster={cluster} onClick={handleClusterClick} />
+              ))}
+            </List>
+          )}
         </Box>
       </Box>
     </Box>
