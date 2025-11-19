@@ -1,5 +1,6 @@
 import { Button } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import PlaceIcon from "@mui/icons-material/Place";
 
 type SelectLocationButtonProps = {
   location: PostLocation | null;
@@ -29,7 +30,13 @@ export default function SelectLocationButton({ location, setLocation, setModalOp
         )
       }
     >
-      {location?.address ? `📍 ${location.address}` : "Add location"}
+      {location?.address ? (
+        <>
+          <PlaceIcon sx={{ mr: 1 }} /> {location.address}
+        </>
+      ) : (
+        "Add location"
+      )}
     </Button>
   );
 }

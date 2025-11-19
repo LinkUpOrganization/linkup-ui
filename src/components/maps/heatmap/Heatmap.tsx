@@ -14,7 +14,7 @@ import {
 
 type HeatMapProps = {
   style?: React.CSSProperties;
-  selectedCluster?: { latitude: number; longitude: number } | null;
+  selectedCluster: ClusterType | null;
 };
 
 export default function Heatmap({ style, selectedCluster }: HeatMapProps) {
@@ -47,7 +47,7 @@ export default function Heatmap({ style, selectedCluster }: HeatMapProps) {
         onBoundsChange={setBounds}
         onZoomChange={setZoom}
       />
-      {selectedCluster && <ClusterMarker coords={selectedCluster} />}
+      {selectedCluster && <ClusterMarker cluster={selectedCluster} />}
     </MapContainer>
   );
 }

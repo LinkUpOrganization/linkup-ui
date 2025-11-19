@@ -4,7 +4,7 @@ import Heatmap from "@/components/maps/heatmap/Heatmap";
 import ClusterItem from "@/components/analytics/ClusterItem";
 import { Box, Typography, List, CircularProgress, useTheme, useMediaQuery } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 
 export const Route = createFileRoute("/analytics")({
@@ -14,15 +14,16 @@ export const Route = createFileRoute("/analytics")({
 function Analytics() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const [selectedCluster, setSelectedCluster] = useState<{ latitude: number; longitude: number } | null>(null);
+  const [selectedCluster, setSelectedCluster] = useState<ClusterType | null>(null);
+  const navigate = useNavigate();
 
   const { data: clusters, isLoading } = useQuery({
     queryKey: ["clusters"],
     queryFn: getPostClusters,
   });
 
-  const handleClusterClick = (coords: { latitude: number; longitude: number }) => {
-    setSelectedCluster(coords);
+  const handleClusterClick = (cluster: ClusterType) => {
+    setSelectedCluster(cluster);
   };
 
   return (
@@ -73,7 +74,18 @@ function Analytics() {
               }}
             >
               {clusters.map((cluster) => (
-                <ClusterItem key={cluster.id} cluster={cluster} onClick={handleClusterClick} />
+                <ClusterItem
+                  key={cluster.id}
+                  cluster={cluster}
+                  onSelect={handleClusterClick}
+                  isSelected={cluster.id === selectedCluster?.id}
+                  onOpenLocations={(c) => {
+                    navigate({
+                      to: "/locations",
+                      search: { sort: "recent", latitude: c.latitude, longitude: c.longitude, radius: 20 },
+                    });
+                  }}
+                />
               ))}
             </List>
           )}
