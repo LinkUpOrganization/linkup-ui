@@ -65,7 +65,7 @@ function ProfilePage() {
           <Box
             ref={mapRef}
             sx={{
-              height: "calc(100vh - 145px)",
+              height: "calc(100vh - 200px)",
               width: "100%",
               mt: 1,
               scrollMarginTop: "calc(env(safe-area-inset-top, 0px) + 72px)",
