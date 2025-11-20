@@ -46,14 +46,31 @@ function ProfilePage() {
           isPending={isPending}
         />
 
-        <Tabs value={activeTab} onChange={(_, newValue) => setActiveTab(newValue)} centered variant="fullWidth">
-          <Tab label="Posts" value="posts" />
-          <Tab label="Route" value="map" />
-        </Tabs>
+        <Box
+          sx={{
+            position: "sticky",
+            top: "env(safe-area-inset-top, 0px)",
+            zIndex: 20,
+            background: "background.paper",
+          }}
+        >
+          <Tabs value={activeTab} onChange={(_, newValue) => setActiveTab(newValue)} centered variant="fullWidth">
+            <Tab label="Posts" value="posts" />
+            <Tab label="Route" value="map" />
+          </Tabs>
+        </Box>
 
         {activeTab === "posts" && <UserPostsSection userId={user.id} />}
         {activeTab === "map" && (
-          <Box ref={mapRef} sx={{ height: "calc(100vh - 145px)", width: "100%", mt: 1 }}>
+          <Box
+            ref={mapRef}
+            sx={{
+              height: "calc(100vh - 145px)",
+              width: "100%",
+              mt: 1,
+              scrollMarginTop: "calc(env(safe-area-inset-top, 0px) + 72px)",
+            }}
+          >
             <UserPostLocations userId={user.id} />
           </Box>
         )}
