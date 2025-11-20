@@ -41,7 +41,6 @@ function Analytics() {
           }}
           selectedCluster={selectedCluster}
         />
-
         <Box
           sx={{
             mt: { xs: 2, md: 2 },
@@ -50,7 +49,10 @@ function Analytics() {
             flexDirection: "column",
             alignItems: "center",
             flexGrow: 1,
-            height: { xs: "calc(100vh - 380px)", sm: "100%" },
+            height: {
+              xs: "calc(100vh - 380px)",
+              md: "100%",
+            },
           }}
         >
           <Typography textAlign="center" variant="h6" sx={{ mb: { xs: 2, md: 4 } }} gutterBottom>
@@ -65,12 +67,9 @@ function Analytics() {
             <List
               sx={{
                 overflowY: "auto",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
                 width: "100%",
                 px: 2,
+                flexGrow: 1,
               }}
             >
               {clusters.map((cluster) => (
