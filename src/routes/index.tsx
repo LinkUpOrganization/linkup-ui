@@ -53,7 +53,7 @@ export default function PostsListPage() {
       <FilteringTabs sort={sort} setFilter={setFilter} />
 
       <Box sx={{ width: "100%", maxWidth: 650, pb: 4, pt: 4, mx: "auto" }}>
-        <PostsList posts={posts} isLoading={isLoading} isError={isError} handleLike={handleLike} />
+        <PostsList posts={posts} isLoading={isLoading} isError={isError} handleLike={handleLike} showRecommendedUsers />
 
         {hasNextPage && <div ref={loadMoreRef} style={{ height: 1 }} />}
 

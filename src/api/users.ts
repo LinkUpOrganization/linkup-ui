@@ -16,3 +16,8 @@ export async function toggleFollow({
     isFollowed,
   });
 }
+
+export const getUserRecommendation = async (): Promise<RecommendedUser[]> => {
+  const response = await apiClient.get("/users/recommended");
+  return response.data;
+};
