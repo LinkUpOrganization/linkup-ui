@@ -4,7 +4,6 @@ import PostsNotFound from "./PostsNotFound";
 import PostCard from "./PostCard";
 import { getBorderRadius } from "@/utils/post-card/getBorderRadius";
 import { useMediaQuery, useTheme } from "@mui/material";
-import RecommendedUsers from "@/components/people/RecommendedUsers";
 
 interface PostsListProps {
   posts: Post[];
@@ -14,13 +13,7 @@ interface PostsListProps {
   showRecommendedUsers?: boolean;
 }
 
-export default function PostsList({
-  posts,
-  isLoading,
-  isError,
-  handleLike,
-  showRecommendedUsers = false,
-}: PostsListProps) {
+export default function PostsList({ posts, isLoading, isError, handleLike }: PostsListProps) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -43,8 +36,6 @@ export default function PostsList({
               borderRadius: getBorderRadius(index, posts.length, isMobile),
             }}
           />
-
-          {showRecommendedUsers && index === 2 && <RecommendedUsers />}
         </>
       ))}
     </>

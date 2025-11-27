@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SearchRouteImport } from './routes/search'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as LocationsRouteImport } from './routes/locations'
 import { Route as ConfirmEmailRouteImport } from './routes/confirm-email'
@@ -26,6 +27,11 @@ import { Route as GuestOnlyLoginRouteImport } from './routes/_guest-only/login'
 import { Route as GuestOnlyForgotPasswordRouteImport } from './routes/_guest-only/forgot-password'
 import { Route as ProtectedEditPostPostIdRouteImport } from './routes/_protected/edit-post/$postId'
 
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
@@ -111,6 +117,7 @@ export interface FileRoutesByFullPath {
   '/confirm-email': typeof ConfirmEmailRoute
   '/locations': typeof LocationsRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/search': typeof SearchRoute
   '/forgot-password': typeof GuestOnlyForgotPasswordRoute
   '/login': typeof GuestOnlyLoginRoute
   '/register': typeof GuestOnlyRegisterRoute
@@ -127,6 +134,7 @@ export interface FileRoutesByTo {
   '/confirm-email': typeof ConfirmEmailRoute
   '/locations': typeof LocationsRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/search': typeof SearchRoute
   '/forgot-password': typeof GuestOnlyForgotPasswordRoute
   '/login': typeof GuestOnlyLoginRoute
   '/register': typeof GuestOnlyRegisterRoute
@@ -146,6 +154,7 @@ export interface FileRoutesById {
   '/confirm-email': typeof ConfirmEmailRoute
   '/locations': typeof LocationsRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/search': typeof SearchRoute
   '/_guest-only/forgot-password': typeof GuestOnlyForgotPasswordRoute
   '/_guest-only/login': typeof GuestOnlyLoginRoute
   '/_guest-only/register': typeof GuestOnlyRegisterRoute
@@ -164,6 +173,7 @@ export interface FileRouteTypes {
     | '/confirm-email'
     | '/locations'
     | '/reset-password'
+    | '/search'
     | '/forgot-password'
     | '/login'
     | '/register'
@@ -180,6 +190,7 @@ export interface FileRouteTypes {
     | '/confirm-email'
     | '/locations'
     | '/reset-password'
+    | '/search'
     | '/forgot-password'
     | '/login'
     | '/register'
@@ -198,6 +209,7 @@ export interface FileRouteTypes {
     | '/confirm-email'
     | '/locations'
     | '/reset-password'
+    | '/search'
     | '/_guest-only/forgot-password'
     | '/_guest-only/login'
     | '/_guest-only/register'
@@ -217,6 +229,7 @@ export interface RootRouteChildren {
   ConfirmEmailRoute: typeof ConfirmEmailRoute
   LocationsRoute: typeof LocationsRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  SearchRoute: typeof SearchRoute
   GuestOnlyForgotPasswordRoute: typeof GuestOnlyForgotPasswordRoute
   GuestOnlyLoginRoute: typeof GuestOnlyLoginRoute
   GuestOnlyRegisterRoute: typeof GuestOnlyRegisterRoute
@@ -226,6 +239,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reset-password': {
       id: '/reset-password'
       path: '/reset-password'
@@ -367,6 +387,7 @@ const rootRouteChildren: RootRouteChildren = {
   ConfirmEmailRoute: ConfirmEmailRoute,
   LocationsRoute: LocationsRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  SearchRoute: SearchRoute,
   GuestOnlyForgotPasswordRoute: GuestOnlyForgotPasswordRoute,
   GuestOnlyLoginRoute: GuestOnlyLoginRoute,
   GuestOnlyRegisterRoute: GuestOnlyRegisterRoute,
