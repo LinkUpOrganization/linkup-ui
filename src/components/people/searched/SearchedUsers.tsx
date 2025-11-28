@@ -1,5 +1,5 @@
 import { searchUsersByDisplayName } from "@/api/users";
-import { Typography } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
 import SearchedUserList from "./SearchedUserList";
@@ -46,9 +46,9 @@ export default function SearchedUsers({ query }: SearchedUsersType) {
       <SearchedUserList users={users} isLoading={showLoading} isError={isError} />
       <div ref={loadMoreRef} style={{ height: 1 }} />
       {isFetchingNextPage && (
-        <Typography variant="body2" color="text.secondary" sx={{ textAlign: "center", mt: 2 }}>
-          Loading more users...
-        </Typography>
+        <Box sx={{ width: "100%", display: "flex", justifyContent: "center", mt: 2 }}>
+          <CircularProgress />
+        </Box>
       )}
     </>
   );

@@ -8,7 +8,7 @@ import { DEFAULT_ZOOM } from "@/constants/posts";
 import { usePostList } from "@/hooks/usePostList";
 import { usePostLocation } from "@/hooks/usePostLocation";
 import { usePostListToggleLike } from "@/hooks/usePostListToggleLike";
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { useInView } from "react-intersection-observer";
@@ -85,9 +85,9 @@ function LocationsPage() {
         {hasNextPage && <div ref={loadMoreRef} style={{ height: 1 }} />}
 
         {isFetchingNextPage && (
-          <Typography variant="body2" color="text.secondary" sx={{ textAlign: "center", mt: 2 }}>
-            Loading more posts...
-          </Typography>
+          <Box sx={{ width: "100%", display: "flex", justifyContent: "center", mt: 2 }}>
+            <CircularProgress />
+          </Box>
         )}
       </Box>
     </Box>

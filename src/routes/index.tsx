@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { createFileRoute } from "@tanstack/react-router";
 import { useInView } from "react-intersection-observer";
 import { useMemo } from "react";
@@ -58,9 +58,9 @@ export default function PostsListPage() {
         {hasNextPage && <div ref={loadMoreRef} style={{ height: 1 }} />}
 
         {isFetchingNextPage && (
-          <Typography variant="body2" color="text.secondary" sx={{ textAlign: "center", mt: 2 }}>
-            Loading more posts...
-          </Typography>
+          <Box sx={{ width: "100%", display: "flex", justifyContent: "center", mt: 2 }}>
+            <CircularProgress />
+          </Box>
         )}
       </Box>
 

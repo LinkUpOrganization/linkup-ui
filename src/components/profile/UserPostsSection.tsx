@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { useMemo } from "react";
 import { useInView } from "react-intersection-observer";
 import { usePostList } from "@/hooks/usePostList";
@@ -33,9 +33,9 @@ export default function UserPostsSection({ userId }: { userId: string }) {
 
       {hasNextPage && <div ref={loadMoreRef} style={{ height: 1 }} />}
       {isFetchingNextPage && (
-        <Typography variant="body2" color="text.secondary" sx={{ textAlign: "center", mt: 2 }}>
-          Loading more posts...
-        </Typography>
+        <Box sx={{ width: "100%", display: "flex", justifyContent: "center", mt: 2 }}>
+          <CircularProgress />
+        </Box>
       )}
     </Box>
   );
