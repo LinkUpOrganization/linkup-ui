@@ -1,5 +1,5 @@
 import UserAvatar from "@/components/auth/UserAvatar";
-import { Favorite, Comment, FavoriteBorder } from "@mui/icons-material";
+import { Favorite, Comment, Edit, FavoriteBorder } from "@mui/icons-material";
 import {
   Card,
   CardContent,
@@ -148,6 +148,18 @@ const PostCard = memo(function PostCard({ post, handleLike, sx }: PostCardProps)
               {post.commentCount || 0}
             </Typography>
           </Link>
+          {user?.id === post.author.id && (
+            <Link
+              className="no-nav"
+              to="/edit-post/$postId"
+              params={{ postId: post.id }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <IconButton color="default" size="small">
+                <Edit fontSize="small" />
+              </IconButton>
+            </Link>
+          )}
         </Box>
       </CardContent>
     </Card>
