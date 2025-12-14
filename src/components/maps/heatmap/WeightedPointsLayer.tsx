@@ -1,5 +1,6 @@
 import { CircleMarker } from "react-leaflet";
 import { useMapBounds } from "@/hooks/useMapBounds";
+import { useMediaQuery, useTheme } from "@mui/material";
 
 type PointDto = {
   latitude: number;
@@ -17,15 +18,17 @@ export default function WeightedPointsLayer({
   onZoomChange: (zoom: number) => void;
 }) {
   useMapBounds(onBoundsChange, onZoomChange);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const maxCount = Math.max(...points.map((p) => p.count), 1);
-
+  const scaleFactor = isMobile ? 12 : 15;
   return (
     <>
       {points.map((p, i) => {
         const intensity = p.count / maxCount;
 
-        const baseRadius = 10 + Math.sqrt(intensity) * 25;
+        const baseRadius = 10 + Math.sqrt(intensity) * scaleFactor;
 
         return (
           <div key={i}>
