@@ -1,11 +1,12 @@
 import { MapContainer, TileLayer } from "react-leaflet";
-import "leaflet.heat";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getHeatmapPoints } from "@/api/posts";
 import { useMediaQuery, useTheme } from "@mui/material";
-import HeatmapLayer from "./HeatmapLayer";
+
+import { getHeatmapPoints } from "@/api/posts";
 import ClusterMarker from "./ClusterMarker";
+import WeightedPointsLayer from "./WeightedPointsLayer";
+
 import {
   HEATMAP_DEFAULT_COORDINATES_DESKTOP,
   HEATMAP_DEFAULT_COORDINATES_MOBILE,
@@ -20,13 +21,14 @@ type HeatMapProps = {
 export default function Heatmap({ style, selectedCluster }: HeatMapProps) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
   const [bounds, setBounds] = useState<BoundsType | null>(null);
   const [zoom, setZoom] = useState<number>(HEATMAP_ZOOM);
 
-  const { data: heatmapPoints } = useQuery({
-    queryKey: ["heatmap", bounds, zoom],
+  const { data: points = [] } = useQuery({
+    queryKey: ["weighted-points", bounds, zoom],
     queryFn: () => (bounds ? getHeatmapPoints({ ...bounds, zoom }) : Promise.resolve([])),
-    enabled: !!bounds && !!zoom,
+    enabled: !!bounds,
   });
 
   return (
@@ -34,7 +36,7 @@ export default function Heatmap({ style, selectedCluster }: HeatMapProps) {
       key={isMobile ? "mobile" : "desktop"}
       center={isMobile ? HEATMAP_DEFAULT_COORDINATES_MOBILE : HEATMAP_DEFAULT_COORDINATES_DESKTOP}
       zoom={zoom}
-      worldCopyJump={true}
+      worldCopyJump
       style={{ outline: "none", ...style }}
       className="no-outline"
     >
@@ -42,11 +44,9 @@ export default function Heatmap({ style, selectedCluster }: HeatMapProps) {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
       />
-      <HeatmapLayer
-        points={heatmapPoints?.map((p: any) => [p.latitude, p.longitude, p.count])}
-        onBoundsChange={setBounds}
-        onZoomChange={setZoom}
-      />
+
+      <WeightedPointsLayer points={points} onBoundsChange={setBounds} onZoomChange={setZoom} />
+
       {selectedCluster && <ClusterMarker cluster={selectedCluster} />}
     </MapContainer>
   );
