@@ -39,7 +39,7 @@ export default function PostCommentsSection() {
           <CircularProgress size={24} />
         </Box>
       ) : !comments?.length ? (
-        <Typography variant="body1" color="text.secondary" textAlign="center">
+        <Typography mt={2} variant="body1" color="text.secondary" textAlign="center">
           Be first to comment the post!
         </Typography>
       ) : (
