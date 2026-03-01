@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - linkup
+name: Build and deploy Node.js app to Azure Web App - linkup
 
 on:
   push:
@@ -12,42 +12,49 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read #This is required for actions/checkout
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          dotnet-version: '8.x'
+          node-version: '20.x' # Або твоя версія
+          cache: 'npm'
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
+      - name: Install dependencies
+        run: npm install
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      - name: Build project
+        run: npm run build
+        # Команда 'npm run build' у тебе створює папку 'dist'
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          name: node-app
+          # Завантажуємо все необхідне: папку dist, package.json та node_modules для 'serve'
+          path: |
+            dist
+            package.json
+            package-lock.json
+            node_modules
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
+    environment:
+      name: 'Production'
     permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
+      id-token: write
+      contents: read
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: .net-app
-      
+          name: node-app
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -55,11 +62,9 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_6532A0D3EF9641CCBCC472F2F067D9E7 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_C7EF3029E6CA40829C66D6858826DE7D }}
 
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
+      - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'linkup'
           slot-name: 'Production'
           package: .
-          
